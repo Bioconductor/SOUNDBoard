@@ -1,0 +1,24 @@
+Package: SOUNDBoard
+Title: Statistically-informed Multi-Omics Reports for Tumor and Other Boards
+Version: 0.0.1
+Authors@R: c(
+    person("Martin", "Morgan", email = "martin.morgan@roswellpark.org",
+        role = "aut"),
+    person("Marcel", "Ramos", email = "marcel.ramos@roswellpark.org",
+        role = "aut"),
+    person("Bioconductor", "Maintainer", email="maintainer@bioconductor.org",
+        role = "cre"))
+Description: This package provides facilities for producing reports
+    that communicate results of multi-'Omics analyses. The reports are
+    destined for consumption by tumor board or other clinician /
+    scientist entities, rather than bioinformaticians. The reports
+    adopt a consistent interface to result presentation. Guiding
+    principles include: inclusion of uncertainty; appropriate color
+    schemes and layouts; appropriate interactivity; re-use across
+    studies. The work is part of the SOUND project
+    (http://www.sound-biomed.eu/), with funding from the European
+    Commission H2020 program.
+Depends: R (>= 3.4.0)
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: true
