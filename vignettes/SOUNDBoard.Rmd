@@ -1,0 +1,22 @@
+---
+title: "Example htmlwidget"
+author: "SOUNDBoard Interest Group"
+date: "February 28, 2017"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo=FALSE}
+suppressPackageStartupMessages(library(RTCGAToolbox))
+suppressPackageStartupMessages(library(htmlwidgets))
+suppressPackageStartupMessages(library(DT))
+suppressMessages({gbm <- getFirehoseData("GBM", runDate = getFirehoseRunningDates(1), Clinic = TRUE)})
+```
+
+```{r}
+datatable(gbm@Clinical, options = list(pageLength = 7))
+```
