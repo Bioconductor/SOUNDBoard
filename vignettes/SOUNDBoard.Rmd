@@ -11,10 +11,16 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r, echo=FALSE}
-suppressPackageStartupMessages(library(RTCGAToolbox))
-suppressPackageStartupMessages(library(htmlwidgets))
-suppressPackageStartupMessages(library(DT))
-suppressMessages({gbm <- getFirehoseData("GBM", runDate = getFirehoseRunningDates(1), Clinic = TRUE)})
+suppressPackageStartupMessages({
+    library(RTCGAToolbox)
+    library(htmlwidgets)
+    library(DT)
+})
+suppressMessages({
+    gbm <- getFirehoseData(
+        "GBM", runDate = getFirehoseRunningDates(1), Clinic = TRUE
+    )
+})
 ```
 
 ```{r}
