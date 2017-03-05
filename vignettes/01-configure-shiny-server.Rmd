@@ -1,0 +1,122 @@
+---
+title: "1. Configuring shiny-server for SOUNDBoard"
+author:
+- name: Martin Morgan
+  affiliation: Roswell Park Cancer Insitute, Buffalo, NY, USA
+  email: Martin.Morgan@RoswellPark.org
+- name: Marcel Ramos
+  affiliation: CUNY School of Public Health, New York, NY, USA
+package: SOUNDBoard
+output: 
+  BiocStyle::html_document2
+vignette: >
+  %\VignetteIndexEntry{1. Configuring shiny-server for SOUNDBoard}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+This vignette documents a initial approach to set up a shiny-based
+server to make SOUNDBoard reports available to users. It is derived
+from [download][] on [installation][] and configuration provided by
+[RStudio][].
+
+[downlaod]: http://www.rstudio.com/products/shiny/download-server/
+[installation]: http://docs.rstudio.com/shiny-server
+[RStudio]: http://rstudio.com
+
+# Installation
+
+Create a system-level R installation
+
+- Instructions to set export `R=/home/mtmorgan/bin/R-devel` in
+  `/etc/init.d/shiny-server` were not successful for me.
+- _R_ should be on the path, e.g., 
+
+        ~$ which R
+        /usr/local/bin/R
+
+- Follow https://www.rstudio.com/products/shiny/download-server/
+
+# Configuration
+
+## Create and configure the _soundboard_ user
+
+Create a new user
+
+    sudo adduser soundboard
+
+Run _R_ as soundboard, installing [shiny][] and [rmarkdown][]
+
+    $ sudo su - soundboard
+    soundboard$ R
+    > source("https://bioconductor.org/biocLite.R")
+    > biocLite(c("shiny", "rmarkdown"))
+    
+(Workaround?) Make sure that _R_ knows to use cairo for plotting. Do
+this by adding a file `~soundboard/.Rprofile`
+
+    local({
+        options(
+            bitmapType = "cairo"
+        )
+    })
+
+Create directories for applications and logs, and populate with
+default (testing) applciations
+
+    soundboard$ mkdir ~/srv/apps
+    soundboard$ mkdir -p /var/log
+    soundboard$ cp /srv/shiny-server/* ~/srv
+
+## Configure shiny-server
+
+Edit the configuration file
+
+    sudo vi /etc/shiny-server/shiny-server.conf
+
+Create a location entry, e.g., augmenting the default configuration
+
+    run_as shiny;
+    
+    server {
+      listen 3838;
+    
+      # Define a location at the base URL
+      location / {
+        site_dir /srv/shiny-server;
+        log_dir /var/log/shiny-server;
+        directory_index on;
+      }
+    
+      location /SOUNDBoard {
+        run_as soundboard;
+        site_dir /home/soundboard/srv;
+        log_dir /home/soundboard/var/log/shiny-server;
+        directory_index on;
+      }
+    }
+
+# Run
+
+## Start / stop / restart
+
+    sudo systemctl start shiny-server
+    sudo systemctl stop shiny-server
+    sudo systemctl restart shiny-server
+
+## Test
+
+Visit http://localhost:3838/SOUNDBoard
+
+## Debug
+
+Server log 
+
+    /var/log/shiny-server.log
+
+User application logs
+
+    /var/log/shiny-server/
+    ~soundboard/var/log/shiny-server
+
+[shiny]: https://cran.r-project.org/package=shiny
+[rmarkdown]: https://cran.r-project.org/package=rmarkdown
