@@ -1,5 +1,2 @@
-.Rhistory
-.RData
-.Rproj.user
-*.txt
-*.[Rr][Dd][Aa]
+vignettes/*html
+vignettes/*R
