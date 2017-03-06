@@ -6,17 +6,6 @@
     env
 })
 
-.stopifnot_SOUNDBoardOption <-
-    function(options)
-{
-    test <- options %in% .SOUNDBoardOption[[".options"]]
-    if (!all(test))
-        stop(
-            "unknown SOUNDBoard option(s): ",
-            paste(sQuote(options[!test]), collapse=", ")
-        )
-}
-
 #' @rdname SOUNDBoardOption-class
 #'
 #' @name SOUNDBoardOption

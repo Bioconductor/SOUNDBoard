@@ -2,7 +2,10 @@
 
 export(SOUNDBoardOption)
 export(SOUNDManager)
+export(SOUNDSimpleCase)
 export(getSOUNDBoardOption)
 exportClasses(SOUNDManager)
+exportClasses(SOUNDSimpleCase)
+exportClasses(SOUNDWidget)
 exportMethods(show)
 import(methods)
