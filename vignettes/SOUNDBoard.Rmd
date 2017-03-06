@@ -5,6 +5,9 @@ date: "February 28, 2017"
 output: html_document
 runtime: shiny
 ---
+# Examples of Interactive Graphics
+
+## Using `htmlwidgets` for displaying tabular data
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -26,3 +29,24 @@ suppressMessages({
 ```{r}
 datatable(gbm@Clinical, options = list(pageLength = 7))
 ```
+
+-----------------------------------------------------------------
+## Using interactive plots with `plotly` and `ggplot2`
+
+```{r}
+suppressPackageStartupMessages({
+    library(ggplot2)
+    library(plotly)
+})
+mtcars$gear <- factor(mtcars$gear,levels=c(3,4,5),
+  	labels=c("3gears","4gears","5gears")) 
+mtcars$am <- factor(mtcars$am,levels=c(0,1),
+  	labels=c("Automatic","Manual")) 
+mtcars$cyl <- factor(mtcars$cyl,levels=c(4,6,8),
+   labels=c("4cyl","6cyl","8cyl"))
+p <- qplot(hp, mpg, data=mtcars, shape=am, color=am, 
+   facets=gear~cyl, size=I(3),
+   xlab="Horsepower", ylab="Miles per Gallon")
+ggplotly(p)
+```
+

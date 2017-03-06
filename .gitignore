@@ -1,2 +1,5 @@
 vignettes/*html
 vignettes/*R
+.Rproj.user
+*.txt
+.Rhistory
