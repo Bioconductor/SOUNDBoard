@@ -21,5 +21,48 @@
 #' @exportClass SOUNDWidget
 .SOUNDWidget <- setClass(
     "SOUNDWidget",
-    contains = "SOUNDBoard"
+    contains = "SOUNDBoard",
+    slots = c(
+        save = "function",
+        load = "function",
+        report = "function"
+    ),
+    prototype = list(
+        save = function(x, file) saveRDS(x, file),
+        load = function(file) readRDA(file),
+        report = function(x) stop("'report()' not implemented")
+    )
 )
+
+.save <- function(x, file) {
+    tryCatch({
+        x@save(x, file)
+    }, error = function(err) {
+        stop(
+            "\n'", class(x), "' cannot save resource:",
+            "\n  ", conditionMessage(err)
+        )
+    })
+}
+
+.load <- function(x, file) {
+    tryCatch({
+        x@load(file)
+    }, error = function(err) {
+        stop(
+            "\n'", class(x), "' cannot load resource:",
+            "\n  ", conditionMessage(err)
+        )
+    })
+}
+
+.report <- function(x) {
+    tryCatch({
+        x@report(x)
+    }, error = function(err) {
+        stop(
+            "\n'", class(x), "' cannot generate report():",
+            "\n  ", conditionMessage(err)
+        )
+    })
+}
