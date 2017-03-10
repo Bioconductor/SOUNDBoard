@@ -30,12 +30,8 @@ report.tbl_assay <-
 {
     bfcid <- as.data.frame(x)$resource
     df <- as.data.frame(bfcinfo(BiocFileCache(x$db_directory)[bfcid]))
-    resource <- switch(
-        df$rname,
-        RDS = readRDS(df$rpath)
-    )
-
-    report(resource)
+    resource <- .load(new(df$rname), df$rpath)
+    .report(resource)
 }
 
 #' @importFrom DT datatable

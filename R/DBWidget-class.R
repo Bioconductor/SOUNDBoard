@@ -184,9 +184,9 @@ setMethod("show", "DBWidget",
 manage <-
     function(x, resource)
 {
-    if (!is(x, "SOUNDWidget"))
-        x <- RDSWidget(x)
-    fl <- bfcnew(BiocFileCache(.db_directory(x)), class(x))
+    if (!is(resource, "SOUNDWidget"))
+        resource <- RDSWidget(resource)
+    fl <- bfcnew(BiocFileCache(.db_directory(x)), class(resource))
     saveRDS(resource, fl)
     names(fl)
 }

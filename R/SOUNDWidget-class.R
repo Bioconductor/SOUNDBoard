@@ -53,15 +53,19 @@
 .load <-
     function(x, file)
 {
-    resource <- tryCatch({
-        x@load(file)
+    tryCatch({
+        resource <- x@load(file)
+        if (!is(resource), class(x))
+            stop(
+                "'load()' returned '", class(resource), "', expected '",
+                class(x), "'"
+            )
     }, error = function(err) {
         stop(
             "\n'", class(x), "' cannot load resource:",
             "\n  ", conditionMessage(err)
         )
     })
-    initialize(x, resource=resource)
 }
 
 .report <-
