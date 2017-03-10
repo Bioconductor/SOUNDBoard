@@ -1,0 +1,176 @@
+---
+title: "2. A short tour of SOUNDBoard"
+author:
+- name: Martin Morgan
+  affiliation: Roswell Park Cancer Insitute, Buffalo, NY, USA
+  email: Martin.Morgan@RoswellPark.org
+- name: Marcel Ramos
+  affiliation: CUNY School of Public Health, New York, NY, USA
+package: SOUNDBoard
+output: html_document
+runtime: shiny
+vignette: >
+  %\VignetteIndexEntry{2. A short tour of SOUNDBoard}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+This vignette provides a quick tour of SOUNDBoard. There are three steps to creating a SOUND Board Report: assembly, presentation, and deployment
+
+# Assembly
+
+Load the [SOUNDBoard][] and [dplyr][] packages
+
+```{r}
+suppressPackageStartupMessages({
+    library(SOUNDBoard)
+    library(dplyr)
+    library(ggplot2)
+})
+```
+
+Create a `DBWidget()`. The first argument is the path to the local
+version of your report and its assets. We use a temporary location for
+the vignette. The second (optional) argument is a file defining SQL
+tables `board`, `cases`, and `assays` via schemas. The schemas are
+used to initialize the data base used to store board information.
+
+```{r}
+x <- DBWidget(tempfile())
+x
+```
+
+Now create records corresponding to boards and cases you are tracking.
+
+```{r}
+tbl(x, "board") <- list(
+    board_uid = "MitoNET",
+    description = "Clinical management of rare genetic disorders"
+)
+
+tbl(x, "cases") <- list(
+    board_uid = "MitoNET",
+    case_uid = "PATIENT_1",
+    age = 36,
+    sex = "Male"
+)
+```
+
+Add 'assays' for cases under investigation. Each assay should be a
+single _R_ object, file, etc. Use `manage()` to serialize the
+object. We provide two examples, to illustrate assays that might be
+summarized as data frames or images.
+
+```{r}
+tbl(x, "assay") <- list(
+    case_uid = "PATIENT_1",
+    assay = "RNA candidates",
+    description = "RNA candidate genes derived from analysis ...",
+    resource = manage(x, data.frame())
+)
+
+tbl(x, "assay") <- list(
+    case_uid = "PATIENT_1",
+    assay = "data.frame",
+    description = "Demonstrating data frame management",
+    resource = manage(x, mtcars)
+)
+
+tbl(x, "assay") <- list(
+    case_uid = "PATIENT_1",
+    assay = "ggplot",
+    description = "Demonstrating ggplot management",
+    resource = manage(x, qplot(hp, mpg, data=mtcars))
+)
+```
+
+Review the information under management
+
+```{r}
+x
+tbl(x, "board")
+tbl(x, "cases")
+tbl(x, "assay")
+```
+
+# Prepare a report
+
+Prepare a report by extracting relevant rows from the board, cases, or
+assay tables, and present them in a markdown document with
+`report()`. The code chunks would typically include `echo=FALSE`. Here
+we present the code chunks with `eval=FALSE`, and then again with
+`echo=FALSE` to see the results in this document.
+
+## Approximate Content
+
+```
+'''{r}
+tbl(x, "board") %>% filter(board_uid == "MitoNET") %>% report()
+
+tbl(x, "cases") %>% filter(case_uid == "PATIENT_1") %>%
+    select(-board_uid) %>% report()
+'''
+
+'''{r}
+tbl(x, "assay") %>%
+    filter(case_uid == "PATIENT_1", assay == "data.frame") %>%
+    report()
+'''
+
+'''{r}
+tbl(x, "assay") %>%
+    filter(case_uid == "PATIENT_1", assay == "ggplot") %>%
+    report()
+'''
+```
+
+## Approximate output
+
+```{r echo=FALSE, results="asis"}
+tbl(x, "board") %>% filter(board_uid == "MitoNET") %>% report()
+
+tbl(x, "cases") %>% filter(case_uid == "PATIENT_1") %>%
+    select(-board_uid) %>% report()
+```
+
+### ggplot
+
+Demonstrating plot management
+
+```{r echo=FALSE, warning=FALSE}
+tbl(x, "assay") %>%
+    filter(case_uid == "PATIENT_1", assay == "ggplot") %>%
+    report()
+```
+
+### data.frame
+
+Demonstrating data frame management
+
+```{r echo=FALSE, warning=FALSE}
+tbl(x, "assay") %>%
+    filter(case_uid == "PATIENT_1", assay == "data.frame") %>%
+    report()
+```
+
+### Embedded apps
+
+More advanced calculations can call back into R.
+
+<div id="shiny">
+  <iframe src="./sample-apps/hello/" style="border: 1px solid #AAA; width: 290px; height: 460px"></iframe>
+</div>
+
+# Deploy the Report and Supporting Assets
+
+```{r eval=FALSE}
+manager <- SOUNDManager(
+    x,
+    host = "localhost", port = "3838", path = "SOUNDBoard",
+    username = "soundboard"
+)
+
+deploy(manager)
+```
+
+[SOUNDBoard]: https://github.com/Bioconductor/SOUNDBoard
+[dplyr]: https://cran.r-project.org/package=dplyr

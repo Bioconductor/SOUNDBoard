@@ -1,0 +1,13 @@
+---
+title: "SOUND Board Report"
+output: html_document
+runtime: shiny
+---
+
+```{r, echo=FALSE}
+numericInput("rows", "How many cars?", 5)
+
+renderTable({
+    head(cars, input$rows)
+})
+```
