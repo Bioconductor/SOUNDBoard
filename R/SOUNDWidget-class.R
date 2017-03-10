@@ -97,3 +97,10 @@ SOUNDWidget <-
     }
 }
 
+#' @export
+RDSWidget <- SOUNDWidget(
+    "RDSWidget",
+    save = function(x, file) saveRDS(x, file),
+    load = function(file) readRDS(file),
+    report = function(x) report(x)
+)
