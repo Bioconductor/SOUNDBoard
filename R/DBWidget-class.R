@@ -184,7 +184,9 @@ setMethod("show", "DBWidget",
 manage <-
     function(x, resource)
 {
-    fl <- bfcnew(BiocFileCache(.db_directory(x)), "RDS")
+    if (!is(x, "SOUNDWidget"))
+        x <- RDSWidget(x)
+    fl <- bfcnew(BiocFileCache(.db_directory(x)), class(x))
     saveRDS(resource, fl)
     names(fl)
 }
@@ -221,11 +223,7 @@ report.tbl_assay <-
 {
     bfcid <- as.data.frame(x)$resource
     df <- as.data.frame(bfcinfo(BiocFileCache(x$db_directory)[bfcid]))
-    resource <- switch(
-        df$rname,
-        RDS = readRDS(df$rpath)
-    )
-
+    resource <- .load(new(df$name))
     report(resource)
 }
 
