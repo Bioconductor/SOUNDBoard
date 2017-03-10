@@ -64,7 +64,7 @@ Create directories for applications and logs, and populate with
 default (testing) applciations
 
     soundboard$ mkdir ~/srv/apps
-    soundboard$ mkdir -p /var/log
+    soundboard$ mkdir -p ~/var/log
     soundboard$ cp /srv/shiny-server/* ~/srv
 
 ## Configure shiny-server
