@@ -4,17 +4,7 @@
 \name{SOUNDWidget-class}
 \alias{SOUNDWidget-class}
 \alias{.SOUNDWidget}
-\alias{SOUNDSimpleCase-class}
-\alias{.SOUNDSimpleCase}
-\alias{SOUNDSimpleCase}
-\alias{show,SOUNDSimpleCase-method}
-\alias{show,SOUNDSimpleCase-class}
 \title{Create and use 'widgets' for consistent data presenation}
-\usage{
-SOUNDSimpleCase(..., allowed_keys = character())
-
-\S4method{show}{SOUNDSimpleCase}(object)
-}
 \arguments{
 \item{...}{key-value pairs of case information. Arguments must be
 named and unique. Each value must be a scalar. When
@@ -22,8 +12,6 @@ named and unique. Each value must be a scalar. When
 \code{allowed_keys}.}
 
 \item{allowed_keys}{character() of allowed key names.}
-
-\item{object}{A SOUNDWidget object}
 }
 \description{
 This page describes 'widgets' for representating and
@@ -34,10 +22,4 @@ This page describes 'widgets' for representating and
     widget provides a constructor method, as well as a 'render'
     method. Widgets themselves may perform considerable work when
     created, but render quickly. Widgets can be fully serialized.
-}
-\details{
-Use \code{SOUNDSimpleCase()} to construct a Case instance
-    of simple key-value pairs. Each key must be unique. Each value
-    must be a scalar. When specified, \code{allowed_keys} restricts
-    key names to specific values.
 }
