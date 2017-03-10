@@ -23,6 +23,7 @@
     "SOUNDWidget",
     contains = "SOUNDBoard",
     slots = c(
+        resource = "ANY",
         save = "function",
         load = "function",
         report = "function"
@@ -34,9 +35,13 @@
     )
 )
 
-.save <- function(x, file) {
+.resource <- function(x) x@resource
+
+.save <-
+    function(x, file)
+{
     tryCatch({
-        x@save(x, file)
+        x@save(.resource(x), file)
     }, error = function(err) {
         stop(
             "\n'", class(x), "' cannot save resource:",
@@ -45,8 +50,10 @@
     })
 }
 
-.load <- function(x, file) {
-    tryCatch({
+.load <-
+    function(x, file)
+{
+    resource <- tryCatch({
         x@load(file)
     }, error = function(err) {
         stop(
@@ -54,11 +61,14 @@
             "\n  ", conditionMessage(err)
         )
     })
+    initialize(x, resource=resource)
 }
 
-.report <- function(x) {
+.report <-
+    function(x)
+{
     tryCatch({
-        x@report(x)
+        x@report(.resource(x))
     }, error = function(err) {
         stop(
             "\n'", class(x), "' cannot generate report():",
@@ -66,3 +76,24 @@
         )
     })
 }
+
+#' @importFrom methods setClass
+#'
+#' @export
+SOUNDWidget <-
+    function(name, save, load, report)
+{
+    class <- setClass(
+        name, contains="SOUNDWidget",
+        prototype = prototype(
+            save = save,
+            load = load,
+            report = report
+        )
+    )
+    
+    function(resource = NULL) {
+        class(resource=resource)
+    }
+}
+
