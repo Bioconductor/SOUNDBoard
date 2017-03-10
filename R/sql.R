@@ -1,4 +1,5 @@
 #' @import RSQLite
+#' @importFrom stats setNames
 
 .SQL_CACHE <- local({
     new.env(parent=emptyenv())
