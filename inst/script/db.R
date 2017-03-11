@@ -1,5 +1,4 @@
 library(SOUNDBoard)
-library(dplyr)
 
 ##
 ## Create / update template
