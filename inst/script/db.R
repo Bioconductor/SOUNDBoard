@@ -42,25 +42,25 @@ tbl(x, "assay") <- list(
     case_uid = "PATIENT_1",
     assay = "ggplot",
     description = "Demonstrating ggplot management",
-    resource = manage(x, qplot(hp, mpg, data=mtcars))
+    resource = manage(x, ggplot2::qplot(hp, mpg, data=mtcars))
 )
 
 ##
 ## Prepare report (embed in markdown)
 ## 
 
-tbl(x, "board") %>% filter(board_uid == "MitoNET") %>% report()
+tbl(x, "board") %>% filter(board_uid == "MitoNET") %>% sbreport()
 
 tbl(x, "cases") %>% filter(case_uid == "PATIENT_1") %>%
-    select(-board_uid) %>% report()
+    select(-board_uid) %>% sbreport()
 
 tbl(x, "assay") %>%
     filter(case_uid == "PATIENT_1", assay == "data.frame") %>%
-    report()
+    sbreport()
 
 tbl(x, "assay") %>%
     filter(case_uid == "PATIENT_1", assay == "ggplot") %>%
-    report()
+    sbreport()
 
 ##
 ## Deploy to server

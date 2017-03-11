@@ -22,26 +22,16 @@
 .SOUNDWidget <- setClass(
     "SOUNDWidget",
     contains = "SOUNDBoard",
-    slots = c(
-        resource = "ANY",
-        save = "function",
-        load = "function",
-        report = "function"
-    ),
-    prototype = list(
-        save = function(x, file) saveRDS(x, file),
-        load = function(file) readRDA(file),
-        report = function(x) stop("'report()' not implemented")
-    )
+    slots = c(resource = "ANY")
 )
 
-.resource <- function(x) x@resource
+sbresource <- function(x) x@resource
 
 .save <-
     function(x, file)
 {
     tryCatch({
-        x@save(.resource(x), file)
+        sbsave(x, file)
     }, error = function(err) {
         stop(
             "\n'", class(x), "' cannot save resource:",
@@ -54,12 +44,13 @@
     function(x, file)
 {
     tryCatch({
-        resource <- x@load(file)
-        if (!is(resource), class(x))
+        resource <- sbload(x, file)
+        if (!is(resource, class(x)))
             stop(
-                "'load()' returned '", class(resource), "', expected '",
-                class(x), "'"
+                "'sbload()' returned '", class(resource), "'",
+                ", expected '", class(x), "'"
             )
+        resource
     }, error = function(err) {
         stop(
             "\n'", class(x), "' cannot load resource:",
@@ -72,39 +63,39 @@
     function(x)
 {
     tryCatch({
-        x@report(.resource(x))
+        sbreport(x)
     }, error = function(err) {
         stop(
-            "\n'", class(x), "' cannot generate report():",
+            "\n'", class(x), "' cannot generate sbreport():",
             "\n  ", conditionMessage(err)
         )
     })
 }
 
-#' @importFrom methods setClass
+#' @importFrom methods setClass setMethod
 #'
 #' @export
 SOUNDWidget <-
-    function(name, save, load, report)
+    function(widget, save, load, report, ...)
 {
-    class <- setClass(
-        name, contains="SOUNDWidget",
-        prototype = prototype(
-            save = save,
-            load = load,
-            report = report
-        )
-    )
-    
-    function(resource = NULL) {
+    class <- setClass(widget, contains="SOUNDWidget", ...)
+    constructor <- function(resource = NULL)
         class(resource=resource)
-    }
+
+    if (!missing(save))
+        setMethod(sbsave, widget, save)
+    if (!missing(load))
+        setMethod(sbload, widget, load)
+    if (!missing(report))
+        setMethod(sbreport, widget, report)
+
+    constructor
 }
 
 #' @export
 RDSWidget <- SOUNDWidget(
     "RDSWidget",
     save = function(x, file) saveRDS(x, file),
-    load = function(file) readRDS(file),
-    report = function(x) report(x)
+    load = function(x, file) initialize(x, readRDS(file)),
+    report = function(x) sbreport(sbresource(x))
 )
