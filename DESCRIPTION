@@ -17,7 +17,7 @@ Description: This package provides facilities for producing reports
     schemes and layouts; appropriate interactivity; re-use across
     studies. The work is part of the SOUND project
     (http://www.sound-biomed.eu/), with funding from the European
-    Commission H2020 program.
+    Commission Horizon 2020 program.
 Depends: R (>= 3.4.0), dplyr
 Imports: methods, stats, magrittr, RSQLite, BiocFileCache, DT, plotly
 Suggests: BiocStyle, knitr, rmarkdown
@@ -28,12 +28,10 @@ LazyData: true
 RoxygenNote: 6.0.1
 Collate:
     'SOUNDBoard-class.R'
+    'SOUNDManager-class.R'
     'sbsave-load-report.R'
     'SOUNDWidget-class.R'
-    'SOUNDBoardOption-class.R'
-    'SOUNDManager-class.R'
     'DBWidget-class.R'
     'src_sound.R'
     'sql.R'
     'utilities.R'
-    'zzz.R'
