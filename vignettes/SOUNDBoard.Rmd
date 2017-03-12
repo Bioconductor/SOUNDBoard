@@ -1,10 +1,16 @@
 ---
-title: "Example htmlwidget"
+title: "Example htmlwidgets"
 author: "SOUNDBoard Interest Group"
-date: "February 28, 2017"
-output: html_document
+package: SOUNDBoard
+output:
+  BiocStyle::html_document2
 runtime: shiny
+vignette: >
+  %\VignetteIndexEntry{Example htmlwidgets}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
+
 # Examples of Interactive Graphics
 
 ## Using `htmlwidgets` for displaying tabular data
@@ -15,19 +21,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r, echo=FALSE}
 suppressPackageStartupMessages({
-    library(RTCGAToolbox)
     library(htmlwidgets)
     library(DT)
 })
-suppressMessages({
-    gbm <- getFirehoseData(
-        "GBM", runDate = getFirehoseRunningDates(1), Clinic = TRUE
-    )
-})
+data("airquality")
+data("mtcars")
 ```
 
 ```{r}
-datatable(gbm@Clinical, options = list(pageLength = 7))
+datatable(airquality, options = list(pageLength = 7))
 ```
 
 -----------------------------------------------------------------
