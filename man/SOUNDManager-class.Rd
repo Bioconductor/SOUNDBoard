@@ -9,21 +9,27 @@
 \alias{show,SOUNDManager-method}
 \title{Managing SOUNDBoard Reports}
 \usage{
-SOUNDManager(server_host = character(), server_path = character(),
-  username = "soundboard")
+SOUNDManager(board_directory, sql_template_path, host = "localhost",
+  port = "3838", path = "SOUNDBoard", username = "soundboard")
 
 \S4method{show}{SOUNDManager}(object)
 }
 \arguments{
-\item{server_host}{character(1) URI of deployment server directory.}
+\item{board_directory}{character(1) Local directory where board, case,
+and assay elements are marshalled.}
 
-\item{server_path}{character(1) path to directory where SOUNDBoard
-reports are served.}
+\item{sql_template_path}{character(1) path to existing SQL template
+file, containing table and templated query definitions.}
 
 \item{username}{character(1) name of SOUNDBoard user from which
 applications are deployed. Default: "soundboard"}
 
 \item{object}{A \code{SOUNDManager} instance.}
+
+\item{server_host}{character(1) URI of deployment server directory.}
+
+\item{server_path}{character(1) path to directory where SOUNDBoard
+reports are served.}
 }
 \description{
 This page describes facilities for managing SOUNDBoard

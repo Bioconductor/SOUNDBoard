@@ -31,7 +31,5 @@ Collate:
     'SOUNDManager-class.R'
     'sbsave-load-report.R'
     'SOUNDWidget-class.R'
-    'DBWidget-class.R'
-    'src_sound.R'
     'sql.R'
     'utilities.R'

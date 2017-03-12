@@ -35,8 +35,8 @@ sbreport(x)
 \code{x} is to be saved / loaded.}
 }
 \description{
-These methods are created for the user with
-    \code{SOUNDWidget()}; they are not created directly. Likewise
+These methods are usually created for the user with
+    \code{SOUNDWidget()}, they are not created directly. Likewise
     methods are invoked by SOUNDBoard infrastructure, not by the
     user.
 }

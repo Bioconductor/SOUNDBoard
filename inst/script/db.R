@@ -9,7 +9,7 @@ library(SOUNDBoard)
 ## Assemble
 ## 
 
-x <- DBWidget(tempfile())
+x <- SOUNDManager(tempfile())
 
 tbl(x, "board") <- list(
     board_uid = "MitoNET",

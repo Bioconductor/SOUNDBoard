@@ -1,7 +1,7 @@
 #' @rdname SOUNDManager-class
-#' 
+#'
 #' @aliases show,SOUNDBoard-method
-#' 
+#'
 #' @title Managing SOUNDBoard Reports
 #'
 #' @description This page describes facilities for managing SOUNDBoard
@@ -15,14 +15,25 @@
     "SOUNDManager",
     contains = "SOUNDBoard",
     slots = c(
-        server_host = "character",
-        server_path = "character",
+        ## development
+        board_directory = "character",
+        sql_template_path = "character",
+        ## production
+        host = "character",
+        port = "character",
+        path = "character",
         username = "character"
     )
 )
 
 #' @rdname SOUNDManager-class
-#' 
+#'
+#' @param board_directory character(1) Local directory where board, case,
+#'     and assay elements are marshalled.
+#'
+#' @param sql_template_path character(1) path to existing SQL template
+#'     file, containing table and templated query definitions.
+#'
 #' @param server_host character(1) URI of deployment server directory.
 #'
 #' @param server_path character(1) path to directory where SOUNDBoard
@@ -34,46 +45,177 @@
 #' @export
 SOUNDManager <-
     function(
-        server_host = character(), server_path = character(),
+        ## development
+        board_directory, sql_template_path,
+        ## production
+        host = "localhost", port = "3838", path = "SOUNDBoard",
         username = "soundboard"
     )
 {
-    if (missing(server_host))
-        server_host <- getSOUNDBoardOption("server_host")
-    .stopifnot_scalar_character(server_host)
+    manager <- .SOUNDManager_development(
+        .SOUNDManager(), board_directory, sql_template_path
+    )
+    .SOUNDManager_production(manager, host, port, path, username)
+}
 
-    if (missing(server_path))
-        server_path <- getSOUNDBoardOption("server_path")
-    .stopifnot_scalar_character(server_path)
+.SOUNDManager_development <-
+    function(manager, board_directory, sql_template_path)
+{
+    if (missing(sql_template_path)) {
+        sql_template_path <- system.file(
+            package="SOUNDBoard", "template", "SOUNDBoard.sql"
+        )
+    }
+    .stopifnot_scalar_character(sql_template_path)
+    stopifnot(file.exists(sql_template_path))
 
-    if (missing(username))
-        username <- getSOUNDBoardOption("username")
+    .stopifnot_scalar_character(board_directory)
+    if (!dir.exists(board_directory))
+        dir.create(board_directory)
+    sql_file <- file.path(board_directory, .SQL_FILENAME)
+
+    ## create data base, if necessary
+    if (!file.exists(sql_file)) {
+        cmds <- .sql_template_cmds(sql_template_path)
+        cmds <- cmds[endsWith(cmds, "_TABLE")]
+        cmds <- vapply(
+            cmds, .sql_sprintf, character(1),
+            sql_cmd_template = sql_template_path
+        )
+        result <- .sql_query(sql_file, cmds)
+    }
+
+    initialize(
+        manager, board_directory = board_directory,
+        sql_template_path = sql_template_path
+    )
+}
+
+.SOUNDManager_production <-
+    function(manager, host, port, path, username)
+{
+    .stopifnot_scalar_character(host)
+    .stopifnot_scalar_character(as.character(port))
+    .stopifnot_scalar_character(path)
     .stopifnot_scalar_character(username)
 
-    .SOUNDManager(
-        server_host = server_host, server_path=server_path, username = username
+    initialize(
+        manager, host = host, port = port, path = path, username = username
     )
-}        
+}
 
-.server_host <- function(object) object@server_host
+.board_directory <- function(object) object@board_directory
 
-.server_path <- function(object) object@server_path
+.sql_template_path <- function(object) object@sql_template_path
+
+.sql_file <- function(object)
+    file.path(.board_directory(object), .SQL_FILENAME)
+
+.host <- function(object) object@host
+
+.port <- function(object) object@port
+
+.path <- function(object) object@path
 
 .username <- function(object) object@username
+
+##
+## sql-related
+##
+
+.src_sqlite <-
+    function(x)
+{
+    src_sqlite(.sql_file(x))
+}
+
+#' @importFrom dplyr src_sqlite src_tbls
+src_tbls.SOUNDManager <-
+    function(x)
+{
+    tbls <- src_tbls(.src_sqlite(x))
+    setdiff(tbls, "sqlite_sequence")
+}
+
+#' @importFrom dplyr tbl
+#'
+#' @export
+tbl.SOUNDManager <-
+    function(src, from, ...)
+{
+    tbl <- tbl(.src_sqlite(src), from, ...)
+    tbl$board_directory <- .board_directory(src)
+    class(tbl) <- c(paste0("tbl_", from), "tbl_sound", class(tbl))
+    idx <- which(!endsWith(colnames(tbl), "_"))
+    select(tbl, idx)
+}
+
+#' @export
+`tbl<-` <- function(src, from, ..., value)
+    UseMethod("tbl<-")
+
+#' @export
+`tbl<-.SOUNDManager` <-
+    function(src, from, ..., value)
+{
+    .stopifnot_is_scalar(from)
+    stopifnot(from %in% src_tbls(src))
+    stopifnot(
+        is.list(value),
+        setequal(names(value), colnames(tbl(src, from)))
+    )
+
+    value <- lapply(value, function(v) {
+        if (is.character(v))
+            gsub("[[:space:]]+", " ", v)
+        v
+    })
+
+    sql_cmd <- sprintf("-- %s_INSERT", toupper(from))
+    args <- c(list(.sql_template_path(src), sql_cmd), value)
+    cmd <- do.call(".sql_sprintf", args)
+
+    .sql_query(.sql_file(x), cmd)
+
+    src
+}
+
+
+##
+## manager functionality
+##
+
+#' @importFrom BiocFileCache BiocFileCache bfcnew
+#'
+#' @export
+manage <-
+    function(x, resource)
+{
+    if (!is(resource, "SOUNDWidget"))
+        resource <- RDSWidget(resource)
+    fl <- bfcnew(BiocFileCache(.board_directory(x)), class(resource))
+    .save(resource, fl)
+    names(fl)
+}
 
 #' @rdname SOUNDManager-class
 #'
 #' @param object A \code{SOUNDManager} instance.
-#' 
+#'
 #' @export
 setMethod("show", "SOUNDManager",
     function(object)
 {
     callNextMethod()
     cat(
-        "server_host:", .server_host(object),
-        "\nserver_path:", .server_path(object),
-        "\nusername:", .username(object),
-        "\n"
+        "development:",
+        "\n  board_directory: ", .board_directory(object),
+        "\n  sql_template: ", .sql_template_path(object),
+        "\nproduction:",
+        "\n  url: https://", .host(object), ":", .port(object),
+            "/", .path(object),
+        "\n  username: ", .username(object),
+        "\ntbl(): ", paste(src_tbls(object), collapse=", "), "\n",
+        sep=""
     )
-})    
+})
