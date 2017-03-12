@@ -23,8 +23,6 @@ Load the [SOUNDBoard][] and [dplyr][] packages
 ```{r}
 suppressPackageStartupMessages({
     library(SOUNDBoard)
-    library(dplyr)
-    library(ggplot2)
 })
 ```
 
@@ -35,7 +33,7 @@ tables `board`, `cases`, and `assays` via schemas. The schemas are
 used to initialize the data base used to store board information.
 
 ```{r}
-x <- DBWidget(tempfile())
+x <- SOUNDManager(tempfile())
 x
 ```
 
@@ -79,7 +77,7 @@ tbl(x, "assay") <- list(
     case_uid = "PATIENT_1",
     assay = "ggplot",
     description = "Demonstrating ggplot management",
-    resource = manage(x, qplot(hp, mpg, data=mtcars))
+    resource = manage(x, ggplot2::qplot(hp, mpg, data=mtcars))
 )
 ```
 
@@ -96,7 +94,7 @@ tbl(x, "assay")
 
 Prepare a report by extracting relevant rows from the board, cases, or
 assay tables, and present them in a markdown document with
-`report()`. The code chunks would typically include `echo=FALSE`. Here
+`sbreport()`. The code chunks would typically include `echo=FALSE`. Here
 we present the code chunks with `eval=FALSE`, and then again with
 `echo=FALSE` to see the results in this document.
 
@@ -104,32 +102,32 @@ we present the code chunks with `eval=FALSE`, and then again with
 
 ```
 '''{r}
-tbl(x, "board") %>% filter(board_uid == "MitoNET") %>% report()
+tbl(x, "board") %>% filter(board_uid == "MitoNET") %>% sbreport()
 
 tbl(x, "cases") %>% filter(case_uid == "PATIENT_1") %>%
-    select(-board_uid) %>% report()
+    select(-board_uid) %>% sbreport()
 '''
 
 '''{r}
 tbl(x, "assay") %>%
     filter(case_uid == "PATIENT_1", assay == "data.frame") %>%
-    report()
+    sbreport()
 '''
 
 '''{r}
 tbl(x, "assay") %>%
     filter(case_uid == "PATIENT_1", assay == "ggplot") %>%
-    report()
+    sbreport()
 '''
 ```
 
 ## Approximate output
 
 ```{r echo=FALSE, results="asis"}
-tbl(x, "board") %>% filter(board_uid == "MitoNET") %>% report()
+tbl(x, "board") %>% filter(board_uid == "MitoNET") %>% sbreport()
 
 tbl(x, "cases") %>% filter(case_uid == "PATIENT_1") %>%
-    select(-board_uid) %>% report()
+    select(-board_uid) %>% sbreport()
 ```
 
 ### ggplot
@@ -139,7 +137,7 @@ Demonstrating plot management
 ```{r echo=FALSE, warning=FALSE}
 tbl(x, "assay") %>%
     filter(case_uid == "PATIENT_1", assay == "ggplot") %>%
-    report()
+    sbreport()
 ```
 
 ### data.frame
@@ -149,7 +147,7 @@ Demonstrating data frame management
 ```{r echo=FALSE, warning=FALSE}
 tbl(x, "assay") %>%
     filter(case_uid == "PATIENT_1", assay == "data.frame") %>%
-    report()
+    sbreport()
 ```
 
 ### Embedded apps
