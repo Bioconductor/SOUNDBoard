@@ -14,11 +14,13 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-This vignette provides a quick tour of SOUNDBoard. There are three steps to creating a SOUND Board Report: assembly, presentation, and deployment
+This vignette provides a quick tour of SOUNDBoard. There are three
+steps to creating a SOUND Board Report: assembly, presentation, and
+deployment
 
 # Assembly
 
-Load the [SOUNDBoard][] and [dplyr][] packages
+Load the [SOUNDBoard][] package
 
 ```{r}
 suppressPackageStartupMessages({
@@ -26,7 +28,7 @@ suppressPackageStartupMessages({
 })
 ```
 
-Create a `DBWidget()`. The first argument is the path to the local
+Create a `SOUNDManager()`. The first argument is the path to the local
 version of your report and its assets. We use a temporary location for
 the vignette. The second (optional) argument is a file defining SQL
 tables `board`, `cases`, and `assays` via schemas. The schemas are
