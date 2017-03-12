@@ -96,7 +96,7 @@ setMethod("sbreport", "tbl_assay",
     function(x)
 {
     bfcid <- as.data.frame(x)$resource
-    df <- as.data.frame(bfcinfo(BiocFileCache(x$db_directory)[bfcid]))
+    df <- as.data.frame(bfcinfo(BiocFileCache(x$board_directory)[bfcid]))
     resource <- .load(new(df$rname), df$rpath)
     .report(resource)
 })
