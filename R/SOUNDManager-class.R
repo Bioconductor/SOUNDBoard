@@ -82,7 +82,8 @@ SOUNDManager <-
             cmds, .sql_sprintf, character(1),
             sql_cmd_template = sql_template_path
         )
-        result <- .sql_query(sql_file, cmds)
+        result <- .sql_get_query(sql_file, cmds)
+        .sql_templates_create_insert(sql_file, sql_template_path)
     }
 
     initialize(
@@ -172,10 +173,9 @@ tbl.SOUNDManager <-
     })
 
     sql_cmd <- sprintf("-- %s_INSERT", toupper(from))
-    args <- c(list(.sql_template_path(src), sql_cmd), value)
-    cmd <- do.call(".sql_sprintf", args)
-
-    .sql_query(.sql_file(x), cmd)
+    result <- .sql_execute(
+        .sql_file(src), .sql_template_path(src), sql_cmd, value
+    )
 
     src
 }

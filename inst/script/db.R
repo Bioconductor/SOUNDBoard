@@ -9,7 +9,8 @@ library(SOUNDBoard)
 ## Assemble
 ## 
 
-x <- SOUNDManager(tempfile())
+## x <- SOUNDManager(tempfile())
+x <- SOUNDManager(tempfile(), "~/a/SOUNDBoard/inst/template/SOUNDBoard.sql")
 
 tbl(x, "board") <- list(
     board_uid = "MitoNET",
@@ -19,7 +20,7 @@ tbl(x, "board") <- list(
 tbl(x, "cases") <- list(
     board_uid = "MitoNET",
     case_uid = "PATIENT_1",
-    age = 36,
+    age = 36L,
     sex = "Male"
 )
 

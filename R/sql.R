@@ -1,11 +1,11 @@
 #' @import RSQLite
 #' @importFrom stats setNames
 
-.SQL_CACHE <- local({
-    new.env(parent=emptyenv())
-})
+.SQL_CACHE <- new.env(parent=emptyenv())
 
 .SQL_FILENAME <- "SOUNDBoard.sqlite"
+
+.SQL_INSERT_FMT = "INSERT INTO %s (%s) VALUES (%s)"
 
 .sql_templates <-
     function(sql_cmd_template)
@@ -19,6 +19,26 @@
         nms <- sql_cmds[!body]
         .SQL_CACHE[[sql_cmd_template]] <-
             setNames(split(sql_cmds[body], grps[body]), nms)
+    }
+    .SQL_CACHE[[sql_cmd_template]]
+}
+
+.sql_templates_create_insert <-
+    function(sql_file, sql_cmd_template)
+{
+    conn <- dbConnect(SQLite(), sql_file)
+    on.exit(dbDisconnect(conn))
+    tbls <- setdiff(dbListTables(conn), "sqlite_sequence")
+    for (tbl in tbls) {
+        flds <- dbListFields(conn, tbl)
+        flds <- flds[!endsWith(flds, "_")]
+        insert <- sprintf(
+            .SQL_INSERT_FMT, tbl,
+            paste0(flds, collapse=", "),
+            paste0(":", flds, collapse=", ")
+        )
+        nm <- paste0("-- ", toupper(tbl), "_INSERT")
+        .SQL_CACHE[[sql_cmd_template]][[nm]] <- insert
     }
     .SQL_CACHE[[sql_cmd_template]]
 }
@@ -45,7 +65,23 @@
     sprintf(cmds, ...)
 }
 
-.sql_query <-
+
+#' @importFrom DBI dbExecute
+.sql_execute <-
+    function(sql_file, sql_cmd_template, sql_cmd, params)
+{
+    conn <- dbConnect(SQLite(), sql_file)
+    tmpl <- .sql_template(sql_cmd_template, sql_cmd)
+    tmpl <- paste0(tmpl, collapse="")
+
+    conn <- dbConnect(SQLite(), sql_file)
+    result <- dbExecute(conn, tmpl, params = params)
+    dbDisconnect(conn)
+
+    result                              # number of rows modified
+}
+
+.sql_get_query <-
     function(sql_file, sqls)
 {
     conn <- dbConnect(SQLite(), sql_file)
