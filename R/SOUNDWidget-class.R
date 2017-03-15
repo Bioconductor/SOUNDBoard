@@ -72,30 +72,38 @@ sbresource <- function(x) x@resource
     })
 }
 
+#' @rdname SOUNDWidget-class
+#' 
+#' @param where The environment in which to define a
+#'     SOUNDWidget-derived class and methods.
+#'
 #' @importFrom methods setClass setMethod
 #'
 #' @export
 SOUNDWidget <-
-    function(widget, save, load, report, ...)
+    function(widget, save, load, report, ..., where=.GlobalEnv)
 {
-    class <- setClass(widget, contains="SOUNDWidget", ...)
+    class <- setClass(widget, contains="SOUNDWidget", ..., where=where)
     constructor <- function(resource = NULL)
         class(resource=resource)
 
     if (!missing(save))
-        setMethod(sbsave, widget, save)
+        setMethod(sbsave, widget, save, where=where)
     if (!missing(load))
-        setMethod(sbload, widget, load)
+        setMethod(sbload, widget, load, where=where)
     if (!missing(report))
-        setMethod(sbreport, widget, report)
+        setMethod(sbreport, widget, report, where=where)
 
     constructor
 }
 
+#' @exportClass RDSWidget
+#'
 #' @export
 RDSWidget <- SOUNDWidget(
     "RDSWidget",
     save = function(x, file) saveRDS(x, file),
-    load = function(x, file) initialize(x, readRDS(file)),
-    report = function(x) sbreport(sbresource(x))
+    load = function(x, file) readRDS(file),
+    report = function(x) sbreport(sbresource(x)),
+    where = topenv()
 )

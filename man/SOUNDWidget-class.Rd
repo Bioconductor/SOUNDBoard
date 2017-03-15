@@ -4,12 +4,19 @@
 \name{SOUNDWidget-class}
 \alias{SOUNDWidget-class}
 \alias{.SOUNDWidget}
+\alias{SOUNDWidget}
 \title{Create and use 'widgets' for consistent data presenation}
+\usage{
+SOUNDWidget(widget, save, load, report, ..., where = .GlobalEnv)
+}
 \arguments{
 \item{...}{key-value pairs of case information. Arguments must be
 named and unique. Each value must be a scalar. When
 \code{length(allowed_keys) != 0}, names of keys must be in
 \code{allowed_keys}.}
+
+\item{where}{The environment in which to define a
+SOUNDWidget-derived class and methods.}
 
 \item{allowed_keys}{character() of allowed key names.}
 }
