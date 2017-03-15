@@ -25,6 +25,11 @@
     slots = c(resource = "ANY")
 )
 
+#' @rdname SOUNDWidget-class
+#'
+#' @param x A \code{SOUNDWidget} instance.
+#'
+#' @export
 sbresource <- function(x) x@resource
 
 .save <-
@@ -73,7 +78,7 @@ sbresource <- function(x) x@resource
 }
 
 #' @rdname SOUNDWidget-class
-#' 
+#'
 #' @param where The environment in which to define a
 #'     SOUNDWidget-derived class and methods.
 #'

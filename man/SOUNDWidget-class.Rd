@@ -4,12 +4,17 @@
 \name{SOUNDWidget-class}
 \alias{SOUNDWidget-class}
 \alias{.SOUNDWidget}
+\alias{sbresource}
 \alias{SOUNDWidget}
 \title{Create and use 'widgets' for consistent data presenation}
 \usage{
+sbresource(x)
+
 SOUNDWidget(widget, save, load, report, ..., where = .GlobalEnv)
 }
 \arguments{
+\item{x}{A \code{SOUNDWidget} instance.}
+
 \item{...}{key-value pairs of case information. Arguments must be
 named and unique. Each value must be a scalar. When
 \code{length(allowed_keys) != 0}, names of keys must be in

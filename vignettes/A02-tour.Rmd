@@ -7,7 +7,10 @@ author:
 - name: Marcel Ramos
   affiliation: CUNY School of Public Health, New York, NY, USA
 package: SOUNDBoard
-output: html_document
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
 runtime: shiny
 vignette: >
   %\VignetteIndexEntry{2. A short tour of SOUNDBoard}
@@ -18,7 +21,9 @@ This vignette provides a quick tour of SOUNDBoard. There are three
 steps to creating a SOUND Board Report: assembly, presentation, and
 deployment
 
-# Assembly
+# Basic use
+
+## Assembly
 
 Load the [SOUNDBoard][] package
 
@@ -92,7 +97,7 @@ tbl(x, "cases")
 tbl(x, "assay")
 ```
 
-# Prepare a report
+## Report preparation
 
 Prepare a report by extracting relevant rows from the board, cases, or
 assay tables, and present them in a markdown document with
@@ -100,7 +105,7 @@ assay tables, and present them in a markdown document with
 we present the code chunks with `eval=FALSE`, and then again with
 `echo=FALSE` to see the results in this document.
 
-## Approximate Content
+### Approximate content
 
 ```
 '''{r}
@@ -123,7 +128,7 @@ tbl(x, "assay") %>%
 '''
 ```
 
-## Approximate output
+### Approximate output
 
 ```{r echo=FALSE, results="asis"}
 tbl(x, "board") %>% filter(board_uid == "MitoNET") %>% sbreport()
@@ -132,9 +137,7 @@ tbl(x, "cases") %>% filter(case_uid == "PATIENT_1") %>%
     select(-board_uid) %>% sbreport()
 ```
 
-### ggplot
-
-Demonstrating plot management
+Demonstrating plot ([ggplot2][] / [plotly][]) management
 
 ```{r echo=FALSE, warning=FALSE}
 tbl(x, "assay") %>%
@@ -142,9 +145,7 @@ tbl(x, "assay") %>%
     sbreport()
 ```
 
-### data.frame
-
-Demonstrating data frame management
+Demonstrating data frame (`data.frame()` / [DT][]) management
 
 ```{r echo=FALSE, warning=FALSE}
 tbl(x, "assay") %>%
@@ -152,15 +153,13 @@ tbl(x, "assay") %>%
     sbreport()
 ```
 
-### Embedded apps
-
-More advanced calculations can call back into R.
+Embedded apps: more advanced calculations can call back into R.
 
 <div id="shiny">
   <iframe src="./sample-apps/hello/" style="border: 1px solid #AAA; width: 290px; height: 460px"></iframe>
 </div>
 
-# Deploy the Report and Supporting Assets
+## Deployment
 
 ```{r eval=FALSE}
 manager <- SOUNDManager(
@@ -172,5 +171,79 @@ manager <- SOUNDManager(
 deploy(manager)
 ```
 
+# Extending reports
+
+## Defining a `SOUNDWidget`
+
+The `SOUNDWidget()` function allows users to create alternative ways
+to store, load, and report different data types. The argument requires
+a single argument, the name of the widget, and three optional
+arguments. The optional arguments are functions that describe how the
+content of the widget is to be saved to disk (e.g., `saveRDS()`),
+loaded from disk (e.g., `readRDS()`) and presented in the report
+(e.g., `DT::datatable()`). Here we create a simple widget that manages
+a `data.frame()`, reporting it as an interactive [DT][] `datatable()`
+(this behavior is provided by default; the widget is developed for
+illustration only).
+
+```{r}
+DTWidget <- SOUNDWidget(
+    "DTWidget",
+    save = function(x, file) saveRDS(x, file),
+    load = function(x, file) readRDS(file),
+    report = function(x) DT::datatable(sbresource(x))
+)
+```
+
+The `SOUNDWidget()` function returns a constructor, to be used with
+the object to be manipulated, e.g., using the `USArrests` built-in
+data set.
+
+```{r}
+arrests <- DTWidget(USArrests)
+arrests
+head(sbresource(arrests))
+```
+
+## Testing
+
+The functionality can be tested directly
+
+```{r}
+fl <- tempfile()
+sbsave(arrests, fl)
+reloaded <- sbload(DTWidget(), fl)
+```
+
+Running the `sbreport()` command generates an html page containing the
+`USArrests` data set as an interative html-based table.
+
+```{r, eval=FALSE}
+sbreport(reloaded)
+```
+
+## Use
+
+The new widget can be incorporated into a report as above, e.g.,
+adding to the data base
+
+```{r}
+tbl(x, "assay") <- list(
+    case_uid = "PATIENT_1",
+    assay = "arrests",
+    description = "Demonstrating custom widget management",
+    resource = manage(x, arrests)
+)
+```
+
+or including in the report
+
+```{r}
+tbl(x, "assay") %>% filter(assay == "arrests") %>% sbreport()
+```
+
 [SOUNDBoard]: https://github.com/Bioconductor/SOUNDBoard
 [dplyr]: https://cran.r-project.org/package=dplyr
+[ggplot2]: https://cran.r-project.org/package=ggplot2
+[plotly]: https://cran.r-project.org/package=plotly
+[DT]: https://cran.r-project.org/package=DT
