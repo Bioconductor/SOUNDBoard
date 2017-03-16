@@ -65,7 +65,7 @@ default (testing) applciations
 
     soundboard$ mkdir ~/srv/apps
     soundboard$ mkdir -p ~/var/log
-    soundboard$ cp /srv/shiny-server/* ~/srv
+    soundboard$ cp -a /srv/shiny-server/* ~/srv
 
 ## Configure shiny-server
 
