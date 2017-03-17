@@ -15,6 +15,14 @@ SOUNDWidget(widget, save, load, report, ..., where = .GlobalEnv)
 \arguments{
 \item{x}{A \code{SOUNDWidget} instance.}
 
+\item{widget}{character(1) widget class name}
+
+\item{save}{function for saving the widget to disk}
+
+\item{load}{function for loading the widget from disk}
+
+\item{report}{method used to display widget after loading (i.e., 'sbreport')}
+
 \item{...}{key-value pairs of case information. Arguments must be
 named and unique. Each value must be a scalar. When
 \code{length(allowed_keys) != 0}, names of keys must be in

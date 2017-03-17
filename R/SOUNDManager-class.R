@@ -34,9 +34,11 @@
 #' @param sql_template_path character(1) path to existing SQL template
 #'     file, containing table and templated query definitions.
 #'
-#' @param server_host character(1) URI of deployment server directory.
+#' @param host character(1) URI of deployment server directory.
 #'
-#' @param server_path character(1) path to directory where SOUNDBoard
+#' @param port character(1) communation endpoint from the host.
+#'
+#' @param path character(1) path to directory where SOUNDBoard
 #'     reports are served.
 #'
 #' @param username character(1) name of SOUNDBoard user from which

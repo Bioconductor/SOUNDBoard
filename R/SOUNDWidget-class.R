@@ -79,6 +79,14 @@ sbresource <- function(x) x@resource
 
 #' @rdname SOUNDWidget-class
 #'
+#' @param widget character(1) widget class name
+#'
+#' @param save function for saving the widget to disk
+#'
+#' @param load function for loading the widget from disk
+#'
+#' @param report method used to display widget after loading (i.e., 'sbreport')
+#'
 #' @param where The environment in which to define a
 #'     SOUNDWidget-derived class and methods.
 #'

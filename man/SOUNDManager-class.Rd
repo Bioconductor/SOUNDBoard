@@ -21,15 +21,17 @@ and assay elements are marshalled.}
 \item{sql_template_path}{character(1) path to existing SQL template
 file, containing table and templated query definitions.}
 
+\item{host}{character(1) URI of deployment server directory.}
+
+\item{port}{character(1) communation endpoint from the host.}
+
+\item{path}{character(1) path to directory where SOUNDBoard
+reports are served.}
+
 \item{username}{character(1) name of SOUNDBoard user from which
 applications are deployed. Default: "soundboard"}
 
 \item{object}{A \code{SOUNDManager} instance.}
-
-\item{server_host}{character(1) URI of deployment server directory.}
-
-\item{server_path}{character(1) path to directory where SOUNDBoard
-reports are served.}
 }
 \description{
 This page describes facilities for managing SOUNDBoard
