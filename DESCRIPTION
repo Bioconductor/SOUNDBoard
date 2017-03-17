@@ -1,6 +1,6 @@
 Package: SOUNDBoard
 Title: Statistically-informed Multi-Omics Reports for Tumor and Other Boards
-Version: 0.0.8
+Version: 0.0.9
 Authors@R: c(
     person("Martin", "Morgan", email = "martin.morgan@roswellpark.org",
         role = "aut"),
@@ -27,6 +27,7 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
 Collate:
+    'SOUNDBoard_html.R'
     'SOUNDBoard-class.R'
     'SOUNDManager-class.R'
     'sbsave-load-report.R'
