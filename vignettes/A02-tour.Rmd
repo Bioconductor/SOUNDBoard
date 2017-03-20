@@ -17,7 +17,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-This vignette provides a quick tour of SOUNDBoard. There are three
+This vignette provides a quick tour of [SOUNDBoard][]. There are three
 steps to creating a SOUND Board Report: assembly, presentation, and
 deployment
 

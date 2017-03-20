@@ -65,13 +65,13 @@ default (testing) applciations
 
     soundboard$ mkdir ~/srv/apps
     soundboard$ mkdir -p ~/var/log
-    soundboard$ cp /srv/shiny-server/* ~/srv
+    soundboard$ cp -a /srv/shiny-server/* ~/srv
 
 ## Configure shiny-server
 
-Edit the configuration file
+From an account with sudo access, edit the configuration file
 
-    sudo vi /etc/shiny-server/shiny-server.conf
+    ~$ sudo vi /etc/shiny-server/shiny-server.conf
 
 Create a location entry, e.g., augmenting the default configuration
 
