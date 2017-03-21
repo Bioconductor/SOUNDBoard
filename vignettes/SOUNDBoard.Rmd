@@ -3,7 +3,7 @@ title: "Example htmlwidgets"
 author: "SOUNDBoard Interest Group"
 package: SOUNDBoard
 output:
-  BiocStyle::html_document2
+  SOUNDBoard::html_document3
 runtime: shiny
 vignette: >
   %\VignetteIndexEntry{Example htmlwidgets}
