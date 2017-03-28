@@ -30,6 +30,7 @@ Load the [SOUNDBoard][] package
 ```{r}
 suppressPackageStartupMessages({
     library(SOUNDBoard)
+    library(shiny)
 })
 ```
 
@@ -115,7 +116,7 @@ tbl(x, "assay") <- list(
     case_uid = "PATIENT_1",
     assay = "shiny",
     description = "Demonstrating shiny application",
-    resource = manage(x, myapp())
+    resource = manage(x, myapp)
 )
 ```
 
