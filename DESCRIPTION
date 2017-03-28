@@ -32,6 +32,7 @@ Collate:
     'SOUNDManager-class.R'
     'sbsave-load-report.R'
     'SOUNDWidget-class.R'
+    'ShinyWidget-class.R'
     'sql.R'
     'utilities.R'
     'zzz.R'

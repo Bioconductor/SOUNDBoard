@@ -1,4 +1,4 @@
----
+a---
 title: "2. A short tour of SOUNDBoard"
 author:
 - name: Martin Morgan
@@ -88,6 +88,37 @@ tbl(x, "assay") <- list(
 )
 ```
 
+Assays can be complicated, e.g., an entire shiny application:
+
+```{r}
+## create a shiny application
+
+myapp <- ShinyAppWidget(
+    shinyApp(
+        ui = bootstrapPage(
+            numericInput('n', 'Number of obs', 100),
+            plotOutput('plot')
+        ),
+        server = function(input, output) {
+            output$plot <- renderPlot({
+                hist(runif(input$n))
+            })
+        }
+    )
+)
+```
+
+Add the shiny app as a managed `ShinyWidget()` assay
+
+```{r}
+tbl(x, "assay") <- list(
+    case_uid = "PATIENT_1",
+    assay = "shiny",
+    description = "Demonstrating shiny application",
+    resource = manage(x, myapp())
+)
+```
+
 Review the information under management
 
 ```{r}
@@ -126,6 +157,12 @@ tbl(x, "assay") %>%
     filter(case_uid == "PATIENT_1", assay == "ggplot") %>%
     sbreport()
 '''
+
+'''{r}
+tbl(x, "assay") %>%
+    filter(case_uid == "PATIENT_1", assay == "shiny") %>%
+    sbreport()
+'''
 ```
 
 ### Approximate output
@@ -155,9 +192,11 @@ tbl(x, "assay") %>%
 
 Embedded apps: more advanced calculations can call back into R.
 
-<div id="shiny">
-  <iframe src="./sample-apps/hello/" style="border: 1px solid #AAA; width: 290px; height: 460px"></iframe>
-</div>
+```{r}
+tbl(x, "assay") %>%
+    filter(case_uid == "PATIENT_1", assay == "shiny") %>%
+    sbreport()
+```
 
 ## Deployment
 
