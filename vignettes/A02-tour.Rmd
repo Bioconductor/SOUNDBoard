@@ -1,4 +1,4 @@
-a---
+---
 title: "2. A short tour of SOUNDBoard"
 author:
 - name: Martin Morgan
