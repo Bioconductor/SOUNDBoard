@@ -63,20 +63,24 @@ SOUNDManager <-
 .SOUNDManager_development <-
     function(manager, board_directory, sql_template_path)
 {
+    stopifnot(.is_scalar_character(board_directory))
+    if (!dir.exists(board_directory))
+        dir.create(board_directory)
+    sql_file <- file.path(board_directory, .SQL_FILENAME)
+
     if (missing(sql_template_path)) {
         sql_template_path <- system.file(
             package="SOUNDBoard", "template", "SOUNDBoard.sql"
         )
     }
-    .stopifnot_scalar_character(sql_template_path)
-    stopifnot(file.exists(sql_template_path))
+    stopifnot(
+        .is_scalar_character(sql_template_path),
+        file.exists(sql_template_path)
+    )
+    if (!missing(sql_template_path) && file.exists(sql_file))
+        message("re-using existing board_directory ", basename(sql_file))
 
-    .stopifnot_scalar_character(board_directory)
-    if (!dir.exists(board_directory))
-        dir.create(board_directory)
-    sql_file <- file.path(board_directory, .SQL_FILENAME)
-
-    ## create data base, if necessary
+    ## create data base
     if (!file.exists(sql_file)) {
         cmds <- .sql_template_cmds(sql_template_path)
         cmds <- cmds[endsWith(cmds, "_TABLE")]
