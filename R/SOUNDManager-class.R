@@ -101,10 +101,12 @@ SOUNDManager <-
 .SOUNDManager_production <-
     function(manager, host, port, path, username)
 {
-    .stopifnot_scalar_character(host)
-    .stopifnot_scalar_character(as.character(port))
-    .stopifnot_scalar_character(path)
-    .stopifnot_scalar_character(username)
+    stopifnot(
+        .is_scalar_character(host),
+        .is_scalar_character(as.character(port)),
+        .is_scalar_character(path),
+        .is_scalar_character(username)
+    )
 
     initialize(
         manager, host = host, port = port, path = path, username = username
