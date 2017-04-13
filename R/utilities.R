@@ -12,14 +12,19 @@
 .stopifnot_scalar_character <-
     function(object, id)
 {
-    test <- is.character(object) && length(object) == 1L && !is.na(object)
-    if (!test) {
+    if (!.is_scalar_character(object)) {
         if (missing(id))
             id <- deparse(substitute(object))
         stop("'", id, "' must be character(1) and not 'NA'", call.=FALSE)
     }
 }
 
+.is_scalar_character <-
+    function(object)
+{
+    is.character(object) && length(object) == 1L && !is.na(object) &&
+        nzchar(object)
+}
 ## SOUNDCase
 
 .stopifnot_allowed_key <-
