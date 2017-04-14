@@ -6,11 +6,21 @@
 \alias{.SOUNDManager}
 \alias{show,SOUNDBoard-method}
 \alias{SOUNDManager}
+\alias{deploy_path}
+\alias{urls}
+\alias{deploy}
 \alias{show,SOUNDManager-method}
 \title{Managing SOUNDBoard Reports}
 \usage{
-SOUNDManager(board_directory, sql_template_path, host = "localhost",
-  port = "3838", path = "SOUNDBoard", username = "soundboard")
+SOUNDManager(board_directory, sql_template_path, rmd_template_path,
+  user = "soundboard", host = "localhost", deploy_path = "~/srv",
+  port = "3838", path = "")
+
+deploy_path(object)
+
+urls(object)
+
+deploy(x, dryrun = TRUE, options = "-avz")
 
 \S4method{show}{SOUNDManager}(object)
 }
@@ -19,19 +29,38 @@ SOUNDManager(board_directory, sql_template_path, host = "localhost",
 and assay elements are marshalled.}
 
 \item{sql_template_path}{character(1) path to existing SQL template
-file, containing table and templated query definitions.}
+file, containing table and templated query definitions. The
+default is \code{system.file(package="SOUNDBoard", "template",
+"SOUNDBoard.sql")} (also use this file to model your own
+templates).}
+
+\item{rmd_template_path}{character(1) (optional) path to existing
+Rmd template file, containing an R-markdown file to be
+displayed to SOUNDBoard members. If no Rmd files exist in
+\code{board_directory} and \code{rmd_template_path} is missing,
+\code{system.file(pacakge="SOUNDBoard", "template",
+"SOUNDBoard.Rmd")} is copied to \code{board_directory}. If a
+file with \code{basename(rmd_template_path)} already exists in
+\code{board_directory}, a warning is issued and the existing
+file \emph{not} replaced.}
+
+\item{user}{character(1) name of SOUNDBoard user from which
+applications are deployed. Default: "soundboard"}
 
 \item{host}{character(1) URI of deployment server directory.}
 
+\item{deploy_path}{character(1) server path to directory where
+SOUNDBoard reports are deployed to.}
+
 \item{port}{character(1) communation endpoint from the host.}
 
-\item{path}{character(1) path to directory where SOUNDBoard
-reports are served.}
+\item{path}{character(1) http: path to SOUNDBoard reports.}
 
-\item{username}{character(1) name of SOUNDBoard user from which
-applications are deployed. Default: "soundboard"}
+\item{object}{\code{SOUNDManager-class} instance.}
 
-\item{object}{A \code{SOUNDManager} instance.}
+\item{dryrun}{logical(1) rsync to \code{deploy_path()}?}
+
+\item{options}{character(1) rsync options.}
 }
 \description{
 This page describes facilities for managing SOUNDBoard
