@@ -20,10 +20,10 @@
 }
 
 .is_scalar_character <-
-    function(object)
+    function(object, zok = FALSE)
 {
     is.character(object) && length(object) == 1L && !is.na(object) &&
-        nzchar(object)
+        (zok || nzchar(object))
 }
 ## SOUNDCase
 
