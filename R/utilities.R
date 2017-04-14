@@ -19,12 +19,19 @@
     }
 }
 
-.is_scalar_character <-
-    function(object, zok = FALSE)
+.is_scalar_logical <-
+    function(object, naok = FALSE)
 {
-    is.character(object) && length(object) == 1L && !is.na(object) &&
-        (zok || nzchar(object))
+    is.logical(object) && length(object) == 1L && (naok || !is.na(object))
 }
+
+.is_scalar_character <-
+    function(object, naok = FALSE, zok = FALSE)
+{
+    is.character(object) && length(object) == 1L &&
+        (naok || !is.na(object)) && (zok || nzchar(object))
+}
+
 ## SOUNDCase
 
 .stopifnot_allowed_key <-
