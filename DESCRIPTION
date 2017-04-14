@@ -1,6 +1,6 @@
 Package: SOUNDBoard
 Title: Statistically-informed Multi-Omics Reports for Tumor and Other Boards
-Version: 0.0.11
+Version: 0.0.12
 Authors@R: c(
     person("Martin", "Morgan", email = "martin.morgan@roswellpark.org",
         role = "aut"),
@@ -19,7 +19,16 @@ Description: This package provides facilities for producing reports
     (http://www.sound-biomed.eu/), with funding from the European
     Commission Horizon 2020 program.
 Depends: R (>= 3.4.0), dplyr
-Imports: methods, stats, magrittr, RSQLite, BiocFileCache, DT, plotly, DBI
+Imports:
+    methods,
+    stats,
+    magrittr,
+    RSQLite,
+    BiocFileCache,
+    DT,
+    plotly,
+    DBI,
+    RColorBrewer
 Suggests: BiocStyle, knitr, rmarkdown
 VignetteBuilder: knitr
 License: Artistic-2.0
