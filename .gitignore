@@ -3,3 +3,7 @@ vignettes/*R
 .Rproj.user
 *.txt
 .Rhistory
+## SASS-related files
+*.scss
+*.map
+.sass-cache/
