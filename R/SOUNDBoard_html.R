@@ -135,7 +135,7 @@ create_html_template <- function() {
 
   ## use the modified code folding script
   lines <- BiocStyle:::modifyLines(lines=lines, from='<script src="$navigationjs$/codefolding.js"></script>', insert=
-                         sprintf('<script src="%s"></script>', file.path(resources, "html", "codefolding.js")))
+                         sprintf('<script src="%s"></script>', file.path(.options$get("resources"), "html", "codefolding.js")))
 
   ## Automatic equation numbering
   lines <- BiocStyle:::modifyLines(lines=lines, from='$if(mathjax-url)$', replace=FALSE, before=TRUE, insert=c(
@@ -184,7 +184,7 @@ base_format <- function(toc = TRUE, number_sections = TRUE, fig_width = NA,
   template <- create_html_template()
 
   # append any user-provided CSS files
-  css <- c(SOUNDBoard:::soundboard2.css, css)
+  css <- c(.options$get("css"), css)
 
 
   # knitr options
