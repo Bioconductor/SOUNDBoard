@@ -29,7 +29,17 @@ data("mtcars")
 ```
 
 ```{r}
-datatable(airquality, options = list(pageLength = 7))
+datatable(airquality, options = list(
+    pageLength = 10,
+    initComplete = JS(
+        "function(settings, json) {",
+        "$(this.api().table().header()).",
+        "css({'background-color': '#43A2CA', 'color': '#FFFFFF'});",
+        "}")),
+    class = "compact display",
+    style = "bootstrap",
+    width = 800,
+    filter = "top")
 ```
 
 -----------------------------------------------------------------
