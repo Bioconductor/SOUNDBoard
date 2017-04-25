@@ -288,6 +288,27 @@ dd {
   line-height: normal;
 }
 
+.soundboard {
+  background-color: #228B22;
+  padding: 4px;
+  font-family: times;
+  font-weight: bold;
+}
+
+table.dataTable.soundboard thead th,
+table.dataTable.soundboard thead td {
+  background-color: #228B22;
+  padding: 4px 17px 4px 4px;
+  font-family: times;
+}
+
+table.dataTable.soundboard tfoot th,
+table.dataTable.soundboard tfoot td {
+  background-color: #228B22;
+  padding: 4px;
+  font-family: times;
+}
+
 input.margin-toggle { display: none; }
 
 label.sidenote-number { display: inline; }

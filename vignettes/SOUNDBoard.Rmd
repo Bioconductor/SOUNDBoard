@@ -30,16 +30,17 @@ data("mtcars")
 
 ```{r}
 datatable(airquality, options = list(
-    pageLength = 10,
-    initComplete = JS(
-        "function(settings, json) {",
-        "$(this.api().table().header()).",
-        "css({'background-color': '#43A2CA', 'color': '#FFFFFF'});",
-        "}")),
-    class = "compact display",
-    style = "bootstrap",
-    width = 800,
-    filter = "top")
+    pageLength = 10
+    # ,initComplete = JS(
+    #     "function(settings, json) {",
+    #     "$(this.api().table().header()).",
+    #     "css({'background-color': '#43A2CA', 'padding': '4px', 'font-family': 'times'});",
+    #     "}")
+    ),
+    class = "soundboard compact stripe",
+    style = "default",
+    # filter = "top",
+    width = 800)
 ```
 
 -----------------------------------------------------------------
