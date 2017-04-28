@@ -2,9 +2,10 @@
 title: "Example htmlwidgets"
 author: "SOUNDBoard Interest Group"
 package: SOUNDBoard
-output:
-  SOUNDBoard::html_document3
 runtime: shiny
+output:
+  html_document:
+    css: soundboard2.css
 vignette: >
   %\VignetteIndexEntry{Example htmlwidgets}
   %\VignetteEngine{knitr::rmarkdown}
@@ -28,7 +29,7 @@ data("airquality")
 data("mtcars")
 ```
 
-```{r}
+```{r, results='asis'}
 datatable(airquality, options = list(
     pageLength = 10
     # ,initComplete = JS(
@@ -37,7 +38,7 @@ datatable(airquality, options = list(
     #     "css({'background-color': '#43A2CA', 'padding': '4px', 'font-family': 'times'});",
     #     "}")
     ),
-    class = "soundboard compact stripe",
+    class = "cell-border compact stripe hover",
     style = "default",
     # filter = "top",
     width = 800)
