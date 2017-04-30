@@ -5,8 +5,6 @@
 
 .SQL_TEMPLATE <- "SOUNDBoard.sql"
 
-.SQL_DBNAME <- "SOUNDBoard.sqlite"
-
 .SQL_INSERT_FMT = "INSERT INTO %s (%s) VALUES (%s)"
 
 .sql_templates <-

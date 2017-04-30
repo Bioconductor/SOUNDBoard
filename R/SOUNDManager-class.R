@@ -80,10 +80,15 @@ SOUNDManager <-
 .SOUNDManager_development <-
     function(manager, board_directory, sql_template_path, rmd_template_path)
 {
-    stopifnot(.is_scalar_character(board_directory))
+    stopifnot(
+        .is_scalar_character(board_directory)
+    )
     if (!dir.exists(board_directory))
         dir.create(board_directory)
-    sql_file <- file.path(board_directory, .SQL_DBNAME)
+
+    sql_file <- file.path(
+        board_directory, paste0(basename(board_directory), ".sqlite")
+    )
 
     if (missing(sql_template_path)) {
         sql_template_path <- system.file(
@@ -121,11 +126,17 @@ SOUNDManager <-
         )
         result <- .sql_get_query(sql_file, cmds)
         .sql_templates_create_insert(sql_file, sql_template_path)
+    } else {
+        ## FIXME: insert statements need to be created from existing sql file
     }
 
     ## create Rmd
     if (!any(rmd_idx)) {
-        file.copy(rmd_template_path, board_directory)
+        path <- file.path(
+            board_directory,
+            paste0(basename(board_directory), ".Rmd")
+        )
+        file.copy(rmd_template_path, path)
     } else {
         rmd_template_path <- rmd_files[rmd_idx]
     }
@@ -164,8 +175,10 @@ SOUNDManager <-
 
 .rmd_template_path <- function(object) object@rmd_template_path
 
-.sql_file <- function(object)
-    file.path(.board_directory(object), .SQL_DBNAME)
+.sql_file <- function(object) {
+    path <- .board_directory(object)
+    file.path(path, paste0(basename(path), ".sqlite"))
+}
 
 .user <- function(object) object@user
 
@@ -264,7 +277,6 @@ tbl.SOUNDManager <-
     src
 }
 
-
 ##
 ## manager functionality
 ##
@@ -294,7 +306,7 @@ deploy <-
 {
     stopifnot(
         .is_scalar_logical(dryrun),
-        .is_scalar_character(rsync, zok=TRUE)
+        .is_scalar_character(options, zok=TRUE)
     )
 
     cmd <- "rsync"
@@ -302,7 +314,7 @@ deploy <-
         if (dryrun) "--dry-run",
         options,
         "-e ssh",
-        .board_directory(x),
+        paste0(.board_directory(x), "/"),
         deploy_path(x)
     )
     message(cmd, " ", paste(args, collapse=" "))
@@ -322,7 +334,7 @@ setMethod("show", "SOUNDManager",
 {
     callNextMethod()
     rmd <- dir(.board_directory(object), ".Rmd$")
-    reports <- paste(c("reports: ", sQuote(rmd)), collapse=" ")
+    reports <- paste(c("reports:", rmd), collapse=" ")
 
     cat(
         "templates:",
@@ -330,7 +342,7 @@ setMethod("show", "SOUNDManager",
         "\n  rmd: ", .rmd_template_path(object),
         "\ndevelopment:",
         "\n  board_directory: ", .board_directory(object),
-        "\n  sqlite: ", .SQL_DBNAME,
+        "\n  sqlite: ", basename(.sql_file(object)),
         "\n", paste0(strwrap(reports, indent=2, exdent=4), collapse="\n"),
         "\nproduction:",
         "\n  deploy_path(): ", deploy_path(object),
