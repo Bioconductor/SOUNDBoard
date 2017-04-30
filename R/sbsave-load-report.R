@@ -89,15 +89,18 @@ setMethod("sbreport", "tbl_cases",
 
 #' @rdname sbsave-load-report
 #'
-#' @importFrom BiocFileCache BiocFileCache bfcinfo
+#' @importFrom BiocFileCache BiocFileCache bfcinfo bfcrpath
 #'
 #' @export
 setMethod("sbreport", "tbl_assay",
     function(x)
 {
     bfcid <- as.data.frame(x)$resource
-    df <- as.data.frame(bfcinfo(BiocFileCache(x$board_directory)[bfcid]))
-    resource <- .load(new(df$rname), df$rpath)
+    bfc <- BiocFileCache(x$board_directory)[bfcid]
+    resource <- .load(
+        new(as.data.frame(bfcinfo(bfc))$rname),
+        bfcrpath(bfc)
+    )
     .report(resource)
 })
 
