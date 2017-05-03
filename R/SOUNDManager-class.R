@@ -84,10 +84,11 @@ SOUNDManager <-
     stopifnot(
         .is_scalar_character(board_directory)
     )
-    if (!dir.exists(board_directory))
-        dir.create(board_directory)
+    assets_directory <- .assets_directory(board_directory)
+    if (!dir.exists(assets_directory))
+        dir.create(assets_directory, recursive = TRUE)
 
-    sql_file <- file.path(board_directory, .SQLITE_FILE)
+    sql_file <- file.path(assets_directory, .SQLITE_FILE)
 
     if (missing(sql_template_path)) {
         sql_template_path <- system.file(
@@ -176,12 +177,18 @@ SOUNDManager <-
 
 .board_directory <- function(object) object@board_directory
 
+.assets_directory <- function(object) {
+    if (!is.character(object))
+        object <- .board_directory(object)
+    file.path(object, ".assets")
+}
+
 .sql_template_path <- function(object) object@sql_template_path
 
 .rmd_template_path <- function(object) object@rmd_template_path
 
 .sql_file <- function(object) {
-    path <- .board_directory(object)
+    path <- .assets_directory(object)
     file.path(path, .SQLITE_FILE)
 }
 
@@ -216,8 +223,7 @@ urls <-
 {
     paste0(
         "http://", .host(object), ":", .port(object), "/",
-        if (nzchar(.path(object))) paste0(.path(object), "/"),
-        basename(.board_directory(object)), "/",
+        ifelse (nzchar(.path(object)), .path(object), "SOUNDBoard"), "/",
         dir(.board_directory(object), ".Rmd$")
     )
 }
@@ -247,7 +253,7 @@ tbl.SOUNDManager <-
     function(src, from, ...)
 {
     tbl <- tbl(.src_sqlite(src), from, ...)
-    tbl$board_directory <- .board_directory(src)
+    tbl$assets_directory <- .assets_directory(src)
     class(tbl) <- c(paste0("tbl_", from), "tbl_sound", class(tbl))
     idx <- which(!endsWith(colnames(tbl), "_"))
     select(tbl, idx)
@@ -294,7 +300,7 @@ manage <-
 {
     if (!is(resource, "SOUNDWidget"))
         resource <- RDSWidget(resource)
-    fl <- bfcnew(BiocFileCache(.board_directory(x)), class(resource))
+    fl <- bfcnew(BiocFileCache(.assets_directory(x)), class(resource))
     .save(resource, fl)
     names(fl)
 }
