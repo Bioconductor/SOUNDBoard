@@ -19,7 +19,7 @@ server to make SOUNDBoard reports available to users. It is derived
 from [download][] on [installation][] and configuration provided by
 [RStudio][].
 
-[downlaod]: http://www.rstudio.com/products/shiny/download-server/
+[download]: http://www.rstudio.com/products/shiny/download-server/
 [installation]: http://docs.rstudio.com/shiny-server
 [RStudio]: http://rstudio.com
 
@@ -61,7 +61,7 @@ this by adding a file `~soundboard/.Rprofile`
     })
 
 Create directories for applications and logs, and populate with
-default (testing) applciations
+default (testing) applications
 
     soundboard$ mkdir ~/srv/apps
     soundboard$ mkdir -p ~/var/log

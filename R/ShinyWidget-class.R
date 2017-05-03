@@ -12,6 +12,7 @@ ShinyAppWidget <- SOUNDWidget(
 #' @exportClass ShinyAppDirWidget
 #'
 #' @export
+#' @importFrom utils tar untar
 ShinyAppDirWidget <- SOUNDWidget(
     widget = "ShinyAppDirWidget",
     save = function(x, file) {
