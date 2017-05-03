@@ -7,7 +7,9 @@ author:
 - name: Marcel Ramos
   affiliation: CUNY School of Public Health, New York, NY, USA
 package: SOUNDBoard
-output: html_document
+output:
+  html_document:
+    css: soundboard2.css
 runtime: shiny
 vignette: >
   %\VignetteIndexEntry{3. Example SOUNDBoard Report}
