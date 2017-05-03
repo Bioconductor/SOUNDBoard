@@ -67,7 +67,8 @@ SOUNDManager <-
         ## development
         board_directory, sql_template_path, rmd_template_path,
         ## production
-        user = "soundboard", host = "localhost", deploy_path = "~/srv",
+        user = "soundboard", host = "localhost",
+        deploy_path = file.path("~/srv", basename(board_directory)),
         port = "3838", path=""
     )
 {
@@ -100,7 +101,7 @@ SOUNDManager <-
         file.exists(sql_template_path)
     )
     if (!missing(sql_template_path) && file.exists(sql_file))
-        message("re-using existing SQLite file ", basename(sql_file))
+        .sbmessage("re-using existing SQLite file ", basename(sql_file))
 
     if (missing(rmd_template_path)) {
         rmd_template_path <- system.file(
@@ -114,7 +115,7 @@ SOUNDManager <-
     rmd_files <- dir(board_directory, pattern=".Rmd$", full.names=TRUE)
     rmd_idx <- basename(rmd_files) == basename(rmd_template_path)
     if (any(rmd_idx) && !missing(rmd_template_path))
-        message("re-using existing Rmd file ", basename(rmd_template_path))
+        .sbmessage("re-using existing Rmd file ", basename(rmd_template_path))
 
     ## create data base
     if (!file.exists(sql_file)) {
@@ -317,7 +318,7 @@ deploy <-
         paste0(.board_directory(x), "/"),
         deploy_path(x)
     )
-    message(cmd, " ", paste(args, collapse=" "))
+    .sbmessage(cmd, " ", paste(args, collapse=" "))
     status <- system2(cmd, args)
     if (status != 0L)
         stop("failed to deploy project\n  error code: ", status)

@@ -45,3 +45,11 @@
         stop("'", id, "' not in allowed_keys", call.=FALSE)
     }
 }
+
+## .sbmessage
+.sbmessage <-
+    function(...)
+{
+    if (interactive())
+        message(...)
+}

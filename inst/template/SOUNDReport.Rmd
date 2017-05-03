@@ -1,13 +1,61 @@
 ---
-title: "SOUND Board Report"
+title: "Example SOUNDBoard Report"
+author:
+- name: Martin Morgan
+  affiliation: Roswell Park Cancer Insitute, Buffalo, NY, USA
+  email: Martin.Morgan@RoswellPark.org
+- name: Marcel Ramos
+  affiliation: CUNY School of Public Health, New York, NY, USA
+package: SOUNDBoard
 output: html_document
 runtime: shiny
+vignette: >
+  %\VignetteIndexEntry{3. Example SOUNDBoard Report}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
-```{r, echo=FALSE}
-numericInput("rows", "How many cars?", 5)
-
-renderTable({
-    head(cars, input$rows)
+```{r setup, echo=FALSE}
+suppressPackageStartupMessages({
+    library(SOUNDBoard)
+    library(shiny)
 })
+
+suppressMessages({
+    x <- SOUNDManager(getwd())
+})
+```
+
+## Board and case summary
+
+```{r echo=FALSE, results="asis"}
+tbl(x, "board") %>% 
+    filter(board_uid == "Mitochondrial Diseases") %>% 
+    sbreport()
+
+tbl(x, "cases") %>% filter(case_uid == "PATIENT_1") %>%
+    select(-board_uid) %>% sbreport()
+```
+
+## Tabular information (interactive)
+
+```{r echo=FALSE, warning=FALSE}
+tbl(x, "assay") %>%
+    filter(case_uid == "PATIENT_1", assay == "data.frame") %>%
+    sbreport()
+```
+
+## Graphical information (interactive)
+
+```{r echo=FALSE, warning=FALSE}
+tbl(x, "assay") %>%
+    filter(case_uid == "PATIENT_1", assay == "ggplot") %>%
+    sbreport()
+```
+
+## Computation 'widgets'
+
+```{r}
+tbl(x, "assay") %>%
+    filter(case_uid == "PATIENT_1", assay == "shiny") %>%
+    sbreport()
 ```
