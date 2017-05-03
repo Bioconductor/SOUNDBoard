@@ -142,6 +142,12 @@ SOUNDManager <-
         rmd_template_path <- rmd_files[rmd_idx]
     }
 
+    ## copy css
+    css <- system.file(
+        package="SOUNDBoard", "resources", "html", "soundboard2.css"
+    )
+    file.copy(css, board_directory)
+
     initialize(
         manager, board_directory = board_directory,
         sql_template_path = sql_template_path,
