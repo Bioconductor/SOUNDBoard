@@ -87,9 +87,7 @@ SOUNDManager <-
     if (!dir.exists(board_directory))
         dir.create(board_directory)
 
-    sql_file <- file.path(
-        board_directory, paste0(basename(board_directory), ".sqlite")
-    )
+    sql_file <- file.path(board_directory, .SQLITE_FILE)
 
     if (missing(sql_template_path)) {
         sql_template_path <- system.file(
@@ -184,7 +182,7 @@ SOUNDManager <-
 
 .sql_file <- function(object) {
     path <- .board_directory(object)
-    file.path(path, paste0(basename(path), ".sqlite"))
+    file.path(path, .SQLITE_FILE)
 }
 
 .user <- function(object) object@user
