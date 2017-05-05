@@ -8,9 +8,11 @@
         file.path(.options$get("resources"), "html", "soundboard2.css"))
 
     theme_soundboard <- ggplot2::theme_bw() +
-        ggplot2::theme(strip.background = ggplot2::element_rect(fill = "#caa132"),
-                       strip.text = element_text(colour = "darkgreen"),
-                       legend.title = ggplot2::element_blank())
+        ggplot2::theme(strip.background = ggplot2::element_rect(fill = "#95C43E",
+                                                                colour = "#5B8347"),
+                       strip.text = element_text(colour = "#F0F0F0", face = "bold"),
+                       legend.title = ggplot2::element_blank(),
+                       panel.grid.major = element_line(colour = "#95C43E"))
 
     ggplot2::theme_set(theme_soundboard)
 }

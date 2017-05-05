@@ -7,3 +7,5 @@ vignettes/*R
 *.scss
 *.map
 .sass-cache/
+vignettes/.assets/
+vignettes/*.css
