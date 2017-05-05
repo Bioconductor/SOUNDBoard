@@ -38,7 +38,7 @@ datatable(airquality, options = list(
     #     "css({'background-color': '#43A2CA', 'padding': '4px', 'font-family': 'times'});",
     #     "}")
     ),
-    class = "cell-border compact stripe hover",
+    class = "compact stripe hover",
     style = "default",
     # filter = "top",
     width = 800)
@@ -61,6 +61,7 @@ mtcars$cyl <- factor(mtcars$cyl,levels=c(4,6,8),
 p <- qplot(hp, mpg, data=mtcars, shape=am, color=am, 
    facets=gear~cyl, size=I(3),
    xlab="Horsepower", ylab="Miles per Gallon")
-ggplotly(p)
+ggplotly(p, width = 518) %>%
+    layout(margin = list(l = 130, r = 85))
 ```
 

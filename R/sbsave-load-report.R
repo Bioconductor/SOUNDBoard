@@ -13,7 +13,7 @@
 #'     user.
 #'
 #' @details
-#' 
+#'
 #' An \code{sbsave(x, file)} method saves \code{x} to \code{file}.
 #'
 #' An \code{sbload(x, file)} method creates an instance of class
@@ -52,7 +52,7 @@ setGeneric(
 
 ##
 ## tbl_*
-## 
+##
 
 local({
     .base_class <- c("tbl_sqlite", "tbl_sql", "tbl_lazy", "tbl")
@@ -123,11 +123,11 @@ setOldClass(c("gg", "ggplot"))
 
 #' @rdname sbsave-load-report
 #'
-#' @importFrom plotly ggplotly 
+#' @importFrom plotly ggplotly
 #'
 #' @export
 setMethod("sbreport", "gg",
     function(x)
 {
-    plotly::ggplotly(x)
+    plotly::ggplotly(x, width = 518) %>% layout(margin = list(l = 130, r = 85))
 })
