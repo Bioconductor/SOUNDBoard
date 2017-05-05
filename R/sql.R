@@ -3,9 +3,11 @@
 
 .SQL_CACHE <- new.env(parent=emptyenv())
 
-.SQL_FILENAME <- "SOUNDBoard.sqlite"
+.SQL_TEMPLATE <- "SOUNDBoard.sql"
 
 .SQL_INSERT_FMT = "INSERT INTO %s (%s) VALUES (%s)"
+
+.SQLITE_FILE <- "SOUNDBoard.sqlite"
 
 .sql_templates <-
     function(sql_cmd_template)

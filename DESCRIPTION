@@ -43,5 +43,6 @@ Collate:
     'SOUNDWidget-class.R'
     'ShinyWidget-class.R'
     'sql.R'
+    'rmd.R'
     'utilities.R'
     'zzz.R'
