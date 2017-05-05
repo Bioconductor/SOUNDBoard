@@ -1,3 +1,4 @@
+#' @import ggplot2
 .onLoad <- function (...) {
     .options$set("sequential", "GnBu")
     .options$set("diverging", "RdBu")
@@ -6,6 +7,12 @@
     .options$set("css",
         file.path(.options$get("resources"), "html", "soundboard2.css"))
 
+    theme_soundboard <- ggplot2::theme_bw() +
+        ggplot2::theme(strip.background = ggplot2::element_rect(fill = "#caa132"),
+                       strip.text = element_text(colour = "darkgreen"),
+                       legend.title = ggplot2::element_blank())
+
+    ggplot2::theme_set(theme_soundboard)
 }
 
 .options <- local({
@@ -31,4 +38,3 @@
         env[[variable]]
     })
 })
-

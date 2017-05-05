@@ -30,28 +30,21 @@ data("mtcars")
 ```
 
 ```{r, results='asis'}
-datatable(airquality, options = list(
-    pageLength = 10
-    # ,initComplete = JS(
-    #     "function(settings, json) {",
-    #     "$(this.api().table().header()).",
-    #     "css({'background-color': '#43A2CA', 'padding': '4px', 'font-family': 'times'});",
-    #     "}")
-    ),
+datatable(airquality, options = list(pageLength = 10),
     class = "compact stripe hover",
-    style = "default",
-    # filter = "top",
-    width = 800)
+    style = "default")
 ```
 
 -----------------------------------------------------------------
 ## Using interactive plots with `plotly` and `ggplot2`
 
-```{r}
+```{r, results='asis'}
 suppressPackageStartupMessages({
     library(ggplot2)
     library(plotly)
+    library(SOUNDBoard)
 })
+
 mtcars$gear <- factor(mtcars$gear,levels=c(3,4,5),
   	labels=c("3gears","4gears","5gears")) 
 mtcars$am <- factor(mtcars$am,levels=c(0,1),
@@ -59,9 +52,8 @@ mtcars$am <- factor(mtcars$am,levels=c(0,1),
 mtcars$cyl <- factor(mtcars$cyl,levels=c(4,6,8),
    labels=c("4cyl","6cyl","8cyl"))
 p <- qplot(hp, mpg, data=mtcars, shape=am, color=am, 
-   facets=gear~cyl, size=I(3),
-   xlab="Horsepower", ylab="Miles per Gallon")
-ggplotly(p, width = 518) %>%
-    layout(margin = list(l = 130, r = 85))
-```
+   facets=gear~cyl, size=I(3), xlab="Horsepower", ylab="Miles per Gallon")
 
+ggplotly(p) %>%
+    layout(legend = list(orientation = "h", y = -0.05))
+```

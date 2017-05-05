@@ -186,6 +186,12 @@ code {
   margin: 0em 0px 0.5em;
 }
 
+div.plotly {
+  padding-left: 65px;
+  padding-right: -65px;
+  max-width: 518px;
+}
+
 img {
   max-width: 100%;
   display: block;

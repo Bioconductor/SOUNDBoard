@@ -13,7 +13,8 @@
 \title{Managing SOUNDBoard Reports}
 \usage{
 SOUNDManager(board_directory, sql_template_path, rmd_template_path,
-  user = "soundboard", host = "localhost", deploy_path = "~/srv",
+  user = "soundboard", host = "localhost",
+  deploy_path = file.path("~/srv", basename(board_directory)),
   port = "3838", path = "")
 
 deploy_path(object)

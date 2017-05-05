@@ -129,5 +129,5 @@ setOldClass(c("gg", "ggplot"))
 setMethod("sbreport", "gg",
     function(x)
 {
-    plotly::ggplotly(x, width = 518) %>% layout(margin = list(l = 130, r = 85))
+    plotly::ggplotly(x)
 })
