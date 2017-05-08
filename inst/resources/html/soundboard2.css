@@ -313,26 +313,34 @@ label.margin-toggle:not(.sidenote-number) { display: none; }
 
 /* Class described in https://benjeffrey.com/posts/pandoc-syntax-highlighting-css
    Colours from https://gist.github.com/robsimmons/1172277 */
+/* Sort by colors */
 
 code > span.kw { color: #E07020; } /* Function calls */
-code > span.dt { color: #404040; } /* Function args */
+code > span.fu { color: #E07020; } /* Function calls */
+
+code > span.bn { color: #DD1144; } /* BaseN */
+
 code > span.dv { color: #D02070; } /* DecVal (decimal values) */
-code > span.bn { color: #d14; } /* BaseN */
 code > span.fl { color: #D02070; } /* Float */
+code > span.number { color: #D02070; }
+
+code > span.dt { color: #404040; } /* Function args */
 code > span.ch { color: #40A040; } /* Char */
 code > span.st { color: #40A040; } /* String */
-code > span.co { color: #808080; font-style: italic; } /* Comment */
-code > span.ot { color: #2020F0; } /* Keywords */
-code > span.al { color: #ff0000; font-weight: bold; } /* AlertToken */
-code > span.fu { color: #E07020; } /* Function calls */
-code > span.er { color: #FF0000; } /* ErrorTok */
-
 code > span.identifier { color: #404040; }
-code > span.number { color: #D02070; }
-code > span.string { color: #3c763d; } /* Char. strings */
+
+code > span.co { color: #808080; font-style: italic; } /* Comment */
 code > span.comment { color: #808080; font-style: italic; }
+
+code > span.ot { color: #2020F0; } /* Keywords */
 code > span.keyword { color: #2020F0; }
 code > span.literal { color: #2020F0; }
+
+code > span.er { color: #FF0000; } /* ErrorTok */
+code > span.al { color: #FF0000; font-weight: bold; } /* AlertToken */
+
+code > span.string { color: #3C763D; } /* Char. strings */
+
 code > span.operator { color: #000000;}
 code > span.paren { color: #000000;}
 
