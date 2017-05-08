@@ -1,6 +1,6 @@
 /* css template from BiocStyle */
 body {
-  margin: 0px auto;
+  margin: 0 auto;
   max-width: 1134px;
 }
 
@@ -12,7 +12,7 @@ body, td {
 /* Table of contents style */
 
 div#TOC ul {
-  padding: 0px 0px 0px 45px;
+  padding: 0 0 0 45px;
   list-style: none;
   background-image: none;
   background-repeat: none;
@@ -22,12 +22,12 @@ div#TOC ul {
 }
 
 div#TOC > ul {
-  padding: 0px 150px 0px 65px;
+  padding: 0 150px 0 65px;
   font-size: 12pt;
 }
 
 div#TOC > ul > li {
-  padding: 5px 0px 0px 0px;
+  padding: 5px 0 0 0;
 }
 
 div#TOC ul ul {
@@ -35,7 +35,7 @@ div#TOC ul ul {
 }
 
 div#TOC.tocify ul {
-  padding: 0px;
+  padding: 0;
   font-size: inherit;
   font-family: inherit;
 }
@@ -47,7 +47,7 @@ div#TOC.tocify li {
 }
 
 p, dl {
-  padding: 0px 150px 0px 65px;
+  padding: 0 150px 0 65px;
   text-align: justify;
 }
 
@@ -58,18 +58,18 @@ p, img, table {
 }
 
 ol, ul {
-  padding: 0px 150px 0px 65px;
+  padding: 0 150px 0 65px;
   list-style: square;
 }
 
 li p {
-  padding: 0px;
+  padding: 0;
 }
 
 pre {
-  margin: 0em 150px 0.5em 0em;
-  padding: 0px 0px 0px 65px;
-  border: 0px none;
+  margin: 0 150px 0.5em 0;
+  padding: 0 0 0 65px;
+  border: 0 none;
 /* code chunk bg color */
   background-color: #f0f0f0;
   white-space: pre;
@@ -78,13 +78,13 @@ pre {
 }
 
 li pre {
-  margin: 0em 0px 0.5em -65px;
-  padding: 0px 0px 0px 65px;
+  margin: 0 0 0.5em -65px;
+  padding: 0 0 0 65px;
 }
 pre code {
   background-color: inherit;
   display: block;
-  padding: 10px 10px 10px 0px;
+  padding: 10px 10px 10px 0;
   overflow-x: inherit;
   font-size: 100%;
 }
@@ -105,14 +105,14 @@ tt, code, pre {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: Helvetica, Arial, sans-serif;
-  margin: 1.2em 150px 0.6em 0em;
+  margin: 1.2em 150px 0.6em 0;
 }
 
 h1.title {
   color: #5B8347;
   line-height: 1.1em;
   margin-top: 25px;
-  border-bottom: 0px;
+  border-bottom: 0;
 }
 
 h1 {
@@ -161,7 +161,7 @@ p.author-name {
 }
 
 sup {
-  top: 0em;
+  top: 0;
 }
 
 .date {
@@ -183,10 +183,10 @@ code {
 /* figures */
 
 .figure {
-  margin: 0em 0px 0.5em;
+  margin: 0 0 0.5em;
 }
 
-div.plotly {
+.plotly {
   padding-left: 65px;
   padding-right: -65px;
   max-width: 518px;
@@ -195,12 +195,12 @@ div.plotly {
 img {
   max-width: 100%;
   display: block;
-  padding: 0px 150px 0px 130px;
+  padding: 0 150px 0 130px;
 }
 
 p > img {
   padding-left: 65px;
-  padding-right: 0px;
+  padding-right: 0;
 }
 
 img.smallfigure {
@@ -220,8 +220,8 @@ img.widefigure {
 }
 
 p > img.widefigure {
-  padding-left: 0px;
-  padding-right: 0px;
+  padding-left: 0;
+  padding-right: 0;
   margin-right: -65px;
 }
 
@@ -237,7 +237,7 @@ p.caption {
 }
 
 caption {
-  padding: 0px;
+  padding: 0;
   margin-bottom: 10px;
   min-width: 583;
 }
@@ -277,7 +277,7 @@ dd {
 }
 
 .col-md-12 {
-  min-height: 0px;
+  min-height: 0;
 }
 
 /* footnotes as sidenotes */
