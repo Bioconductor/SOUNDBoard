@@ -217,6 +217,7 @@ deploy_path <-
 
 #' @rdname SOUNDManager-class
 #'
+#' @importFrom tools file_path_sans_ext
 #' @export
 urls <-
     function(object)
@@ -224,7 +225,7 @@ urls <-
     paste0(
         "http://", .host(object), ":", .port(object), "/",
         ifelse (nzchar(.path(object)), .path(object), "SOUNDBoard"), "/",
-        dir(.board_directory(object), ".Rmd$")
+        file_path_sans_ext(dir(.board_directory(object), "Rmd$"))
     )
 }
 
