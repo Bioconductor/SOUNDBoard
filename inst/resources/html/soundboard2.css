@@ -115,17 +115,14 @@ h1.title {
   border-bottom: 0;
 }
 
-h1 {
-  line-height: 1.4em;
-  border-bottom: 3px #125579 solid;
-}
-
 h1, h2, h3 {
-  color: #6e9358;
+  color: #6E9358;
 }
 
 h1 {
   font-size: 18.0pt;
+  line-height: 1.4em;
+  border-bottom: 3px #CAA132 solid;
 }
 
 h2 {
