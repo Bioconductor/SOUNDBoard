@@ -1,0 +1,40 @@
+---
+title: "Example Klinischer Report"
+author:
+- name: Marcel Ramos
+  affiliation: CUNY School of Public Health, New York, NY, USA
+- name: Martin Morgan
+  affiliation: Roswell Park Cancer Institute, Buffalo, NY, USA
+package: SOUNDBoard
+output:
+  html_document:
+    css: soundboard2.css
+runtime: shiny
+vignette: >
+    %\VignetteIndexEntry{4. Example Clinical Report}
+    %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+suppressPackageStartupMessages({
+    library(SOUNDBoard)
+    library(shiny)
+})
+
+suppressMessages({
+    x <- SOUNDManager(getwd(), "inst/template/KBoard.sql",
+    "inst/template/SOUNDClinical.Rmd")
+})
+```
+
+## Board and case summary
+
+```{r echo=FALSE, results="asis"}
+tbl(x, "board") %>% 
+    filter(board_uid == "Mitochondrial Diseases") %>% 
+    sbreport()
+
+tbl(x, "cases") %>% filter(case_uid == "PATIENT_1") %>%
+    select(-board_uid) %>% sbreport()
+```

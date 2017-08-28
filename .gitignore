@@ -9,3 +9,4 @@ vignettes/*R
 .sass-cache/
 vignettes/.assets/
 vignettes/*.css
+*.[Rr][Dd][Aa]
