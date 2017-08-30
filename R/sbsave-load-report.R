@@ -119,6 +119,14 @@ setMethod("sbreport", "data.frame",
     DT::datatable(x)
 })
 
+#' @rdname sbsave-load-report
+#' @export
+setMethod("sbreport", "DataFrame",
+    function(x)
+{
+    DT::datatable(as.data.frame(x))
+})
+
 setOldClass(c("gg", "ggplot"))
 
 #' @rdname sbsave-load-report

@@ -9,6 +9,7 @@
 \alias{sbreport,tbl_cases-method}
 \alias{sbreport,tbl_assay-method}
 \alias{sbreport,data.frame-method}
+\alias{sbreport,DataFrame-method}
 \alias{sbreport,gg-method}
 \title{Save, load, and report on SOUNDWidget instances.}
 \usage{
@@ -25,6 +26,8 @@ sbreport(x)
 \S4method{sbreport}{tbl_assay}(x)
 
 \S4method{sbreport}{data.frame}(x)
+
+\S4method{sbreport}{DataFrame}(x)
 
 \S4method{sbreport}{gg}(x)
 }
