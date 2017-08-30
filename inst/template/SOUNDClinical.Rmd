@@ -23,8 +23,7 @@ suppressPackageStartupMessages({
 })
 
 suppressMessages({
-    x <- SOUNDManager(getwd(), "inst/template/KBoard.sql",
-    "inst/template/SOUNDClinical.Rmd")
+    x <- SOUNDManager(getwd())
 })
 ```
 
@@ -32,9 +31,18 @@ suppressMessages({
 
 ```{r echo=FALSE, results="asis"}
 tbl(x, "board") %>% 
-    filter(board_uid == "Mitochondrial Diseases") %>% 
+    filter(board_uid == "GBMset") %>% 
     sbreport()
 
-tbl(x, "cases") %>% filter(case_uid == "PATIENT_1") %>%
+tbl(x, "cases") %>% filter(case_uid == "TCGA-32-2615") %>%
     select(-board_uid) %>% sbreport()
 ```
+
+## GISTIC Score and Thresholded by Gene
+
+```{r}
+tbl(x, "assay") %>%
+    filter(case_uid == "TCGA-32-2615", assay == "GISTIC2") %>%
+    sbreport()
+```
+
