@@ -1,40 +1,58 @@
 library(SOUNDBoard)
+library(S4Vectors)
+
 ##
 ## Create / update template
 ## - SQL tables & queries
 ##
 
 ## # Read file from AWS
-system(paste("aws s3 cp",
-"s3://experimenthub/curatedTCGAData/GBM_GISTIC_AllByGene-20160128.rda",
-"inst/extdata/"))
-system(paste("aws s3 cp",
-"s3://experimenthub/curatedTCGAData/GBM_colData-20160128.rda",
-"inst/extdata/"))
-system(paste("aws s3 cp",
-"s3://experimenthub/curatedTCGAData/GBM_Mutation-20160128.rda",
-"inst/extdata/"))
+downloadAWS <- function(filename) {
+    system(
+        paste(paste0("aws s3 cp s3://experimenthub/curatedTCGAData/",
+              filename),
+              "inst/extdata/"))
+}
 
-load("inst/extdata/GBM_GISTIC_AllByGene-20160128.rda")
-genes <- rownames(`GBM_GISTIC_AllByGene-20160128`)[
-    !grepl("ENSG", rownames(`GBM_GISTIC_AllByGene-20160128`))]
-GBM_GISTIC <- `GBM_GISTIC_AllByGene-20160128`[genes[1:10],
-    "TCGA-32-2615-01A-01D-0911-01"]
-GBM_GISTIC <- DataFrame(assay(GBM_GISTIC))
-GBM_GISTIC <- DataFrame(gene = rownames(GBM_GISTIC),
-                        Gscore = GBM_GISTIC[[1L]])
+filenames <- c("GBM_GISTIC_AllByGene-20160128.rda",
+    "GBM_GISTIC_ThresholdedByGene-20160128.rda",
+    "GBM_colData-20160128.rda",
+    "GBM_Mutation-20160128.rda")
 
-load("inst/extdata/GBM_colData-20160128.rda")
-GBM_colData <-
-    `GBM_colData-20160128`[rownames(`GBM_colData-20160128`) %in% "TCGA-32-2615",
-        c("Age..years.at.diagnosis.", "gender", "tumor_tissue_site")]
-GBM_colData <- c(DataFrame(case_uid = rownames(GBM_colData)), GBM_colData,
-                 DataFrame(diagnosis = "GBM"))
-names(GBM_colData)[2:4] <- c("age", "sex", "primary_site")
+invisible(lapply(filenames, downloadAWS))
 
-load("inst/extdata/GBM_Mutation-20160128.rda")
+unname(vapply(filenames, function(file) {
+    load(paste0("inst/extdata/", file), envir = .GlobalEnv)
+}, character(1L)))
+
 GBM_Mutation <- `GBM_Mutation-20160128`[,
     grepl("^TCGA-32-2615", colnames(`GBM_Mutation-20160128`))]
+genes <- assay(GBM_Mutation, "Hugo_Symbol")
+matchingGenes <- intersect(genes[!is.na(genes)],
+    rownames(`GBM_GISTIC_AllByGene-20160128`))
+GBM_Mutation <- GBM_Mutation[as.character(assay(GBM_Mutation, "Hugo_Symbol"))
+    %in% matchingGenes, ]
+GBM_Mutation <- DataFrame(gene = matchingGenes,
+    mutation = as.character(assay(GBM_Mutation, "Variant_Classification")))
+
+GBM_GISTIC2 <- `GBM_GISTIC_ThresholdedByGene-20160128`[
+    rownames(`GBM_GISTIC_ThresholdedByGene-20160128`) %in% matchingGenes,
+        "TCGA-32-2615-01A-01D-0911-01"]
+
+GBM_GISTIC <- `GBM_GISTIC_AllByGene-20160128`[matchingGenes,
+    "TCGA-32-2615-01A-01D-0911-01"]
+GBM_GISTIC <- GBM_GISTIC[order(rownames(GBM_GISTIC)), ]
+GBM_GISTIC <- DataFrame(gene = rownames(GBM_GISTIC),
+    Gscore = unname(assay(GBM_GISTIC)[, 1L]),
+    GThresh = unname(assay(GBM_GISTIC2[order(rownames(GBM_GISTIC2)), ])[, 1L]))
+
+GBM_colData <-
+    `GBM_colData-20160128`[rownames(`GBM_colData-20160128`) %in% "TCGA-32-2615",
+        c("Age..years.at.diagnosis.", "gender", "tumor_tissue_site", "race")]
+names(GBM_colData)[1:3] <- c("age", "sex", "primary_site")
+GBM_colData <- c(DataFrame(case_uid = rownames(GBM_colData)), GBM_colData,
+                 DataFrame(diagnosis = "GBM"))
+
 
 ##
 ## Assemble
@@ -55,16 +73,15 @@ tbl(x, "cases") <- c(list(
 )
 
 tbl(x, "assay") <- list(
-    case_uid = GBM_colData[["case_uid"]],
+    case_uid = "TCGA-32-2615",
     assay = "GISTIC2",
     description = "GISTIC score by gene",
     resource = manage(x, GBM_GISTIC)
 )
 
-## TODO: FIX Mutation dataset
 tbl(x, "assay") <- list(
-    case_uid = GBM_colData[["case_uid"]],
-    assay = "mutation",
+    case_uid = "TCGA-32-2615",
+    assay = "Mutation",
     description = "Mutations by gene",
     resource = manage(x, GBM_Mutation)
 )
@@ -75,15 +92,15 @@ tbl(x, "assay") <- list(
 
 tbl(x, "board") %>% filter(board_uid == "GBMset") %>% sbreport()
 
-tbl(x, "cases") %>% filter(case_uid == GBM_colData[["case_uid"]]) %>%
+tbl(x, "cases") %>% filter(case_uid == "TCGA-32-2615") %>%
     select(-board_uid) %>% sbreport()
 
 tbl(x, "assay") %>%
-    filter(case_uid == GBM_colData[["case_uid"]], assay == "GISTIC2") %>%
+    filter(case_uid == "TCGA-32-2615", assay == "GISTIC2") %>%
     sbreport()
 
 tbl(x, "assay") %>%
-    filter(case_uid == GBM_colData[["case_uid"]], assay == "Mutation") %>%
+    filter(case_uid == "TCGA-32-2615", assay == "Mutation") %>%
     sbreport()
 
 ##
@@ -93,7 +110,7 @@ tbl(x, "assay") %>%
 manager <- SOUNDManager(
     x,
     host = "localhost", port = "3838", path = "SOUNDBoard",
-    username = "soundboard"
+    user = "soundboard"
 )
 
 deploy(manager)

@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS cases (
     age INTEGER CHECK (age > 0),
     sex TEXT CHECK (sex = "male" or sex = "female"),
     primary_site TEXT,
+    race TEXT,
     diagnosis TEXT,
     FOREIGN KEY(board_uid) REFERENCES board(board_uid)
 );
