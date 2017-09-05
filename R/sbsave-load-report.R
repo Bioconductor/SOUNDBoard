@@ -120,6 +120,7 @@ setMethod("sbreport", "data.frame",
 })
 
 #' @rdname sbsave-load-report
+#' @importClassesFrom S4Vectors DataFrame
 #' @export
 setMethod("sbreport", "DataFrame",
     function(x)
