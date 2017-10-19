@@ -87,7 +87,7 @@
     function(sql_file, sqls)
 {
     conn <- dbConnect(SQLite(), sql_file)
-    result <- lapply(sqls, dbGetQuery, conn = conn)
+    result <- lapply(sqls, dbExecute, conn = conn)
     dbDisconnect(conn)
     result
 }
