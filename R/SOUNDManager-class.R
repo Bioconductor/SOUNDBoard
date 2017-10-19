@@ -236,7 +236,12 @@ urls <-
 .src_sqlite <-
     function(x)
 {
-    src_sqlite(.sql_file(x))
+    check_dbplyr()
+    con <- DBI::dbConnect(RSQLite::SQLite(), .sql_file(x))
+    RSQLite::initExtension(con)
+    disco <- dbplyr:::db_disconnector(con, quiet = TRUE)
+    structure(list(con = con, disco = disco),
+        class = c("src_dbi", "src_sql", "src"))
 }
 
 #' @importFrom dplyr src_sqlite src_tbls
