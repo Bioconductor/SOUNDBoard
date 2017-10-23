@@ -1,0 +1,98 @@
+---
+title: "4. Available widgets"
+author:
+- name: Martin Morgan
+  affiliation: Roswell Park Cancer Insitute, Buffalo, NY, USA
+  email: Martin.Morgan@RoswellPark.org
+- name: Marcel Ramos
+  affiliation: CUNY School of Public Health, New York, NY, USA
+package: SOUNDBoard
+output:
+  SOUNDBoard::html_document3:
+    toc: true
+    toc_depth: 2
+runtime: shiny
+vignette: >
+  %\VignetteIndexEntry{3. Creating and deploying a report}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+Types of widgets
+
+1. Static -- e.g., presenting static information, e.g., patient id,
+   case number, ...
+
+2. Interactive widgets -- JavaScript-based interactions for displaying
+   static information that the user can manipulate, e.g., large
+   tables, interactive plots.
+
+3. shiny-based widgets -- Require evaluation in R, doing arbitrary
+   'read-only' operations that could potentially be time-consuming.
+
+4. Linked widgets -- e.g., [crosstalk][] -- choice of gene in table of
+   variants updates choice of available drugs.
+
+# Generic implementations
+
+Status: planned, beta, available
+
+## Static
+
+- Serialized _R_ objects, other than `data.frame()` or `ggplot()`. _beta_
+
+    ```
+    ## widget <- ... # any R object
+    tbl(x, "assay") <- list(
+        case_uid = "PATIENT_1",
+        assay = "R object",
+        description = "Demonstrating R object management",
+        resource = manage(x, widget)
+    )
+    ```
+
+- `tbl_board` and `tbl_cases`. _beta_
+
+## Interactive
+
+- `data.frame()` via `DT::datatable()`. _beta_
+- `ggplot()` via `plotly::ggplotly()`. _beta_
+
+## Shiny-based
+
+- `ShinyAppWidget()`. _beta_ 
+  -specified via _R_ code in a single file.
+
+- `ShinyAppDirWidget()`. _beta_
+  - _R_ code in ui.R / server.R files.
+
+## Linked
+
+# Specific implementations
+
+- `HeatmapWidget()`. _planned_
+  - rows: genes; columns: samples
+  - samples clustered; bars to indicate phenotype
+  - interactive in the sense that hover over a cell provides row,
+    column, value info.
+    
+    ```
+    heatmap <- ## make heatmap w/ ComplexHeatmap
+    widget <- HeatmapWidget(heatmap)
+    tbl(x, "assay") <- list(
+        case_uid = "PATIENT_1",
+        assay = "R object",
+        description = "Demonstrating R object management",
+        resource = manage(x, widget)
+    )
+    ```
+
+- `OncoPrintWidget()`. _planned_
+  - implemented with [ComplexHeatmap][]
+
+- `DGIdbWidget()`. _planned_
+  - query DGIdb with genes, implemented with
+    [rDGIdb][]
+
+[ComplexHeatmap]: https://bioconductor.org/packages/ComplexHeatmap
+[rDGIdb]: https://bioconductor.org/packages/rDGIdb
+[crosstalk]: https://rstudio.github.io/crosstalk/
