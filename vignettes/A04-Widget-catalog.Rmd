@@ -52,18 +52,69 @@ Status: planned, beta, available
 
 - `tbl_board` and `tbl_cases`. _beta_
 
+    ```
+    tbl(x, "board") <- list(
+        board_uid = "Unique_Board_ID"
+        description = "Board description"
+    )
+    ```
+    
+    ```
+    tbl(x, "cases") <- list(
+        board_uid = "Unique_Board_ID",
+        case_uid = "Unique_Case_ID",
+        age = 36,
+        sex = "Male"
+    )
+    ```
+
 ## Interactive
 
 - `data.frame()` via `DT::datatable()`. _beta_
+
+    ```
+    ## assay resource is a data.frame object
+    ## tbl(x, "assay") <- list(..., assay = "data.frameObj",
+    ##    resource = manage(x, ggplot2::ggplot(...))) # save into assays list
+    tbl(x, "assay") %>%
+        filter(case_uid == "Unique_Case_ID", assay == "data.frameObj") %>%
+        sbreport()
+    ```
+
 - `ggplot()` via `plotly::ggplotly()`. _beta_
+    
+    ```
+    ## assay resource is a ggplot object
+    ## tbl(x, "assay") <- list(..., assay = "ggplotObj",
+    ##    resource = manage(x, ggplot2::ggplot(...))) # save into assays list
+    tbl(x, "assay") %>%
+        filter(case_uid == "Unique_Case_ID", assay == "ggplotObj") %>%
+        sbreport()
+    ```
 
 ## Shiny-based
 
 - `ShinyAppWidget()`. _beta_ 
   -specified via _R_ code in a single file.
+  
+    ```
+    ## myApp <- ShinyAppWidget(...) # assign shiny app as object
+    ## tbl(x, "assay") <- list(..., assay = "myApp") # save into assays list
+    tbl(x, "assay") %>%
+        filter(case_uid == "Unique_Case_ID", assay == "myApp") %>%
+        sbreport()
+    ```
 
 - `ShinyAppDirWidget()`. _beta_
   - _R_ code in ui.R / server.R files.
+
+    ```
+    ## myShinyDir <- ShinyAppDirWidget(resource = "path/to/app/dir")
+    ## tbl(x, "assay") <- list(..., assay = "shinyAppDir",
+    ##    resource = manage(x, myShinyDir)) # save into assays
+    tbl(x, "assay") %>%
+        filter(case_uid == "Unique_Case_ID", assay == "shinyAppDir")
+    ```
 
 ## Linked
 
