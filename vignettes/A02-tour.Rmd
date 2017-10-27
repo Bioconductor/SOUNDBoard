@@ -17,6 +17,11 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_knit$set(root.dir =
+    file.path(SOUNDBoard:::.options$get("resources"), "images"))
+```
+
 This vignette provides a quick tour of [SOUNDBoard][]. There are three
 steps to creating a SOUND Board Report: assembly, presentation, and
 deployment
