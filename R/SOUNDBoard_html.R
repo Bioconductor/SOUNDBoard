@@ -1,3 +1,7 @@
+#' @importFrom knitr opts_chunk
+#' @importFrom bookdown html_document2
+NULL
+
 # Use BiocStyle defaults
 .width = function(fontsize = "10pt", knitr = FALSE, default = 80L) {
     w = if (is.null(fontsize))
@@ -12,7 +16,7 @@
 
     # knitr output is usually commented out
     if (knitr) {
-        com = opts_chunk$get("comment")
+        com = knitr::opts_chunk$get("comment")
         if (!is.null(com) && !is.na(com) && nzchar(com))
             w = w - (nchar(com) + 1L)
     }
@@ -169,8 +173,8 @@ html_document3 <- function(toc = TRUE, number_sections = TRUE, fig_width = NA,
                            fig_height = NA, fig_retina = NULL, css = NULL,
                            pandoc_args = NULL, ...) {
 
-  require("BiocStyle", quietly = TRUE)
-  require("SOUNDBoard", quietly = TRUE)
+  requireNamespace("BiocStyle", quietly = TRUE)
+  requireNamespace("SOUNDBoard", quietly = TRUE)
 
     bookdown::html_document2(base_format = base_format, toc = toc,
         number_sections = FALSE, fig_width = fig_width, fig_height = fig_height,

@@ -236,7 +236,7 @@ urls <-
 .src_sqlite <-
     function(x)
 {
-    check_dbplyr()
+    dplyr:::check_dbplyr()
     con <- DBI::dbConnect(RSQLite::SQLite(), .sql_file(x))
     RSQLite::initExtension(con)
     disco <- dbplyr:::db_disconnector(con, quiet = TRUE)
