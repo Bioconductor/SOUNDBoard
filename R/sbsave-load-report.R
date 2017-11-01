@@ -129,6 +129,7 @@ setMethod("sbreport", "DataFrame",
 })
 
 setOldClass(c("gg", "ggplot"))
+setOldClass("iplotCorr")
 
 #' @rdname sbsave-load-report
 #'

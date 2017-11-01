@@ -1,6 +1,6 @@
 Package: SOUNDBoard
 Title: Statistically-informed Multi-Omics Reports for Tumor and Other Boards
-Version: 0.0.37
+Version: 0.0.38
 Authors@R: c(
     person("Martin", "Morgan", email = "martin.morgan@roswellpark.org",
         role = "aut"),
@@ -23,7 +23,7 @@ Imports:
     methods,
     stats,
     magrittr,
-    ggplot2 (> 2.2.1),
+    ggplot2,
     RSQLite,
     BiocFileCache,
     dbplyr,
@@ -32,6 +32,7 @@ Imports:
     DT,
     plotly,
     DBI,
+    qtlcharts,
     RColorBrewer,
     shiny,
     S4Vectors
