@@ -236,7 +236,7 @@ urls <-
 .src_sqlite <-
     function(x)
 {
-    dplyr:::check_dbplyr()
+    dplyr::check_dbplyr()
     con <- DBI::dbConnect(RSQLite::SQLite(), .sql_file(x))
     RSQLite::initExtension(con)
     disco <- dbplyr:::db_disconnector(con, quiet = TRUE)
@@ -244,7 +244,7 @@ urls <-
         class = c("src_dbi", "src_sql", "src"))
 }
 
-#' @importFrom dplyr src_sqlite src_tbls
+#' @importFrom dplyr src_sqlite src_tbls tbl check_dbplyr
 src_tbls.SOUNDManager <-
     function(x)
 {
@@ -252,8 +252,6 @@ src_tbls.SOUNDManager <-
     setdiff(tbls, "sqlite_sequence")
 }
 
-#' @importFrom dplyr tbl
-#'
 #' @export
 tbl.SOUNDManager <-
     function(src, from, ...)

@@ -1,4 +1,4 @@
-#' @importFrom knitr opts_chunk
+#' @importFrom knitr opts_chunk hook_pdfcrop
 #' @importFrom bookdown html_document2
 NULL
 
@@ -38,7 +38,7 @@ NULL
     opts_chunk = .opts_chunk,
     knit_hooks = list(
       # remove figure margins
-      crop = knitr:::hook_pdfcrop
+      crop = knitr::hook_pdfcrop
     ),
     opts_hooks = .opts_hooks,
     opts_template = NULL
