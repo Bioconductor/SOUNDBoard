@@ -1,6 +1,6 @@
 Package: SOUNDBoard
 Title: Statistically-informed Multi-Omics Reports for Tumor and Other Boards
-Version: 0.0.34
+Version: 0.0.35
 Authors@R: c(
     person("Martin", "Morgan", email = "martin.morgan@roswellpark.org",
         role = "aut"),
@@ -48,6 +48,7 @@ Collate:
     'sbsave-load-report.R'
     'SOUNDWidget-class.R'
     'ShinyWidget-class.R'
+    'HeatmapWidget-class.R'
     'sql.R'
     'rmd.R'
     'utilities.R'

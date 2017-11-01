@@ -11,6 +11,7 @@
 \alias{sbreport,data.frame-method}
 \alias{sbreport,DataFrame-method}
 \alias{sbreport,gg-method}
+\alias{sbreport,iplotCorr-method}
 \title{Save, load, and report on SOUNDWidget instances.}
 \usage{
 sbsave(x, file)
@@ -30,6 +31,8 @@ sbreport(x)
 \S4method{sbreport}{DataFrame}(x)
 
 \S4method{sbreport}{gg}(x)
+
+\S4method{sbreport}{iplotCorr}(x)
 }
 \arguments{
 \item{x}{An instance derived from \code{SOUNDWidget-class}.}

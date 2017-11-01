@@ -140,3 +140,14 @@ setMethod("sbreport", "gg",
 {
     plotly::ggplotly(x)
 })
+
+#' @rdname sbsave-load-report
+#'
+#' @importFrom qtlcharts iplotCorr iplotCorr_render
+#'
+#' @export
+setMethod("sbreport", "iplotCorr",
+    function(x)
+{
+    qtlcharts::iplotCorr_render(x)
+})
