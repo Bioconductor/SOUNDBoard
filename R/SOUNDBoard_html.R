@@ -188,7 +188,7 @@ base_format <- function(toc = TRUE, number_sections = TRUE, fig_width = NA,
   template <- create_html_template()
 
   # append any user-provided CSS files
-  css <- c(.options$get("css"), css)
+  css <- c(SOUNDBoard:::.options$get("css"), css)
 
 
   # knitr options
@@ -200,7 +200,7 @@ base_format <- function(toc = TRUE, number_sections = TRUE, fig_width = NA,
                            "figure*" = 'class="widefigure"',
                            "figure" = NULL)
         options$out.extra = paste(options$out.extra, out.extra)
-        hook_plot_md(x, options)
+        knitr::hook_plot_md(x, options)
       }
     )
   ))
