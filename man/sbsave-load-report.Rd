@@ -12,6 +12,7 @@
 \alias{sbreport,DataFrame-method}
 \alias{sbreport,gg-method}
 \alias{sbreport,iplotCorr-method}
+\alias{sbreport,HeatmapList-method}
 \title{Save, load, and report on SOUNDWidget instances.}
 \usage{
 sbsave(x, file)
@@ -33,6 +34,8 @@ sbreport(x)
 \S4method{sbreport}{gg}(x)
 
 \S4method{sbreport}{iplotCorr}(x)
+
+\S4method{sbreport}{HeatmapList}(x)
 }
 \arguments{
 \item{x}{An instance derived from \code{SOUNDWidget-class}.}

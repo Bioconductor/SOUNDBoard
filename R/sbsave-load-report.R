@@ -152,3 +152,14 @@ setMethod("sbreport", "iplotCorr",
 {
     qtlcharts::iplotCorr_render(x)
 })
+
+#' @rdname sbsave-load-report
+#'
+#' @importClassesFrom ComplexHeatmap HeatmapList
+#'
+#' @export
+setMethod("sbreport", "HeatmapList",
+    function(x)
+{
+    ComplexHeatmap::draw(x, heatmap_legend_side = "bottom")
+})
