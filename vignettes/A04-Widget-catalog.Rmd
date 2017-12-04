@@ -120,14 +120,16 @@ Status: planned, beta, available
 
 # Specific implementations
 
-- `HeatmapWidget()`. _planned_
+- `HeatmapWidget()`. _beta_
   - rows: genes; columns: samples
   - samples clustered; bars to indicate phenotype
   - interactive in the sense that hover over a cell provides row,
-    column, value info.
+    column, value info
+  - implemented with [ComplexHeatmap][]
     
     ```
-    heatmap <- ## make heatmap w/ ComplexHeatmap
+    ## Make a Heatmap using the ComplexHeatmap package
+    ## heatmap <- ComplexHeatmap::Heatmap(matrix(...)) 
     widget <- HeatmapWidget(heatmap)
     tbl(x, "assay") <- list(
         case_uid = "PATIENT_1",
@@ -137,8 +139,21 @@ Status: planned, beta, available
     )
     ```
 
-- `OncoPrintWidget()`. _planned_
+- `OncoPrintWidget()`. _beta_
+  - rows: genes: columns: samples
+  - Visualizes multiple genomic alteration events via heatmap
   - implemented with [ComplexHeatmap][]
+
+    ```
+    ## Use the ComplexHeatmap to make an oncoPrint graphic
+    ht <- ComplexHeatmap::oncoPrint(...)
+    tbl(x, "assay") <- list(
+        case_uid = "TCGA-32-2615",
+        assay = "onco",
+        description = "Heatmap Widget Demo",
+        resource = manage(x, ht)
+    )
+    ```
 
 - `DGIdbWidget()`. _planned_
   - query DGIdb with genes, implemented with
