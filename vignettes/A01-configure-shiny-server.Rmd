@@ -8,7 +8,7 @@ author:
   affiliation: CUNY School of Public Health, New York, NY, USA
 package: SOUNDBoard
 output: 
-  SOUNDBoard::html_document3
+  SOUNDBoard::html_document
 vignette: >
   %\VignetteIndexEntry{1. Configuring shiny-server for SOUNDBoard}
   %\VignetteEngine{knitr::rmarkdown}

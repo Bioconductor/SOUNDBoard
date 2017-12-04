@@ -9,8 +9,8 @@ SOUNDBoardTempFile <- function (fileName) {
     file.path(biocDir, fileName)
 }
 
-#' @export html_document3
-html_document3 <- function(toc = TRUE,
+#' @export html_document
+html_document <- function(toc = TRUE,
                            number_sections = TRUE,
                            fig_width = NA,
                            fig_height = NA,

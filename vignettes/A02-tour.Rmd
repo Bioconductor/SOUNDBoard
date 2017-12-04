@@ -8,7 +8,7 @@ author:
   affiliation: CUNY School of Public Health, New York, NY, USA
 package: SOUNDBoard
 output:
-  SOUNDBoard::html_document3:
+  SOUNDBoard::html_document:
     toc: true
     toc_depth: 2
 runtime: shiny
