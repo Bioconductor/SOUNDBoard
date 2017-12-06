@@ -1,6 +1,6 @@
 Package: SOUNDBoard
 Title: Statistically-informed Multi-Omics Reports for Tumor and Other Boards
-Version: 0.0.44
+Version: 0.0.45
 Authors@R: c(
     person("Martin", "Morgan", email = "martin.morgan@roswellpark.org",
         role = "aut"),
@@ -34,6 +34,7 @@ Imports:
     DBI,
     qtlcharts,
     RColorBrewer,
+    rDGIdb,
     shiny,
     S4Vectors
 Suggests: BiocStyle, rmarkdown
@@ -50,6 +51,7 @@ Collate:
     'SOUNDWidget-class.R'
     'ShinyWidget-class.R'
     'HeatmapWidget-class.R'
+    'DGIdbWidget-class.R'
     'sql.R'
     'rmd.R'
     'utilities.R'

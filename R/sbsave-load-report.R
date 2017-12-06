@@ -163,3 +163,14 @@ setMethod("sbreport", "HeatmapList",
 {
     ComplexHeatmap::draw(x, heatmap_legend_side = "bottom")
 })
+
+#' @rdname sbsave-load-report
+#'
+#' @importFrom rDGIdb resultSummary
+#'
+#' @export
+setMethod("sbreport", "rDGIdbResult",
+    function(x)
+{
+    DT::datatable(rDGIdb::resultSummary(x))
+})
