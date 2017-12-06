@@ -155,9 +155,20 @@ Status: planned, beta, available
     )
     ```
 
-- `DGIdbWidget()`. _planned_
+- `DGIdbWidget()`. _beta_
   - query DGIdb with genes, implemented with
     [rDGIdb][]
+  - obtain a 'datatable' of 'rDGIdb::resultSummary' output
+    ```
+    ## Query the DGI servers for drug data
+    dgi <- rDGIdb::queryDGIdb(...)
+    tbl(x, "assay") <- list(
+        case_uid = "TCGA-32-2615",
+        assay = "DGIdb",
+        description = "Druggability by Gene with 'resultSummary'",
+        resource = manage(x, dgi)
+    )
+    ```
 
 [ComplexHeatmap]: https://bioconductor.org/packages/ComplexHeatmap
 [rDGIdb]: https://bioconductor.org/packages/rDGIdb
