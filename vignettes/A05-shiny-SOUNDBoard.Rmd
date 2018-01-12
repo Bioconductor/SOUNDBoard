@@ -1,0 +1,145 @@
+---
+title: "5. Shiny and SOUNDBoard"
+author: "Marcel Ramos"
+package: SOUNDBoard
+output:
+  SOUNDBoard::html_document:
+    toc: true
+    toc_depth: 2
+runtime: shiny
+vignette: >
+  %\VignetteIndexEntry{5. Shiny and SOUNDBoard}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+```
+
+```{r, include = FALSE}
+suppressPackageStartupMessages({
+    library(SOUNDBoard)
+    library(S4Vectors)
+    library(curatedTCGAData)
+    library(DT)
+    library(shiny)
+})
+```
+
+## Load packages
+
+```{r, eval = FALSE}
+    library(SOUNDBoard)
+    library(S4Vectors)
+    library(curatedTCGAData)
+    library(DT)
+    library(shiny)
+```
+
+
+## Data Setup
+
+```{r}
+suppressMessages({
+    gbm <- curatedTCGAData("GBM",
+        c("GISTICT", "GISTICA", "RNASeq2GeneNorm"), FALSE)
+})
+
+## Extract Hugo_Symbols column
+rownames(gbm[[3]]) <- RaggedExperiment::mcols(gbm[[3]])[["Hugo_Symbol"]]
+
+genesOfInterest <- c("FAF1", "ASTN1", "PROX1", "PARP1", "AKR1C4", "TAF3")
+suppressMessages({
+    gbm <- gbm[genesOfInterest, 1:3, ]
+})
+
+GBM_colData <- colData(gbm)
+GBM_colData <-
+    GBM_colData[,
+        c("Age..years.at.diagnosis.", "gender", "tumor_tissue_site", "race")]
+
+names(GBM_colData)[1:3] <- c("age", "sex", "primary_site")
+
+## BUG in C method (all inputs are DataFrame)
+# GBM_colData <- c(DataFrame(case_uid = rownames(GBM_colData)), GBM_colData,
+#     DataFrame(diagnosis = "GBM"))
+GBM_colData <- DataFrame(DataFrame(case_uid = rownames(GBM_colData)),
+    GBM_colData, DataFrame(diagnosis = "GBM"))
+
+GBM_GISTIC <- as.data.frame(assay(gbm[[1L]]))
+```
+
+## SOUNDBoard Setup
+
+```{r}
+x <- SOUNDManager(tempfile(), "../inst/template/KBoard.sql",
+    "../inst/template/SOUNDClinical.Rmd")
+
+tbl(x, "board") <- list(
+    board_uid = "GBMset",
+    description = "Clinical management of GlioBlastoma Multiforme"
+)
+
+nrows <- seq_len(nrow(GBM_colData))
+
+for (i in nrows) {
+tbl(x, "cases") <- c(list(
+    board_uid = "GBMset"),
+    as.list(GBM_colData[i, , drop = FALSE])
+    )
+}
+
+for (i in nrows) {
+tbl(x, "assay") <- list(
+    case_uid = GBM_colData[i, "case_uid"],
+    assay = "GISTIC2",
+    description = paste("GISTIC_DATA", i),
+    resource = manage(x, GBM_GISTIC[, i, drop = FALSE])
+    )
+}
+```
+
+## Embedded Application
+
+```{r shinyapp, echo=FALSE, cache = FALSE}
+shinyApp(
+    ui = fluidPage(
+        includeCSS("../inst/resources/html/soundboard2.css"),
+        fluidRow(
+            column(8, titlePanel("SOUNDBoard Report"))
+        ),
+        fluidRow(DT::dataTableOutput("table")),
+        fluidRow(DT::dataTableOutput("mutation"))
+        ),
+    server = function(input, output, session) {
+        pt_table <- as.data.frame(tbl(x, "cases"))
+
+        output$table <- DT::renderDataTable({
+            DT::datatable(pt_table,
+            rownames = FALSE, selection = 'none',
+            callback = JS("table.on('click.dt', 'td', function() {
+                var rowIndx = table.cell(this).index().row;
+                rowIndx += 1;
+                // var col = table.cell(this).index().column;
+                // var rnd = Math.random();
+                // var data = [row_, col, rnd];
+                Shiny.onInputChange('rows', rowIndx);
+                });"),
+            options = list(dom = "ftpi")
+            )
+        })
+        case_uid <- eventReactive(input$rows, {
+          pt_table[input$rows, "case_uid"]
+        })
+        output$mutation <- DT::renderDataTable({
+            cid <- case_uid()
+            tbl(x, "assay") %>%
+                filter(assay == "GISTIC2", case_uid == cid) %>%
+                    sbreport()
+        })
+    },
+    options = list(
+        width = "100%", height = 800
+    )
+)
+```

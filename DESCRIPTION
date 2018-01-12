@@ -1,6 +1,6 @@
 Package: SOUNDBoard
 Title: Statistically-informed Multi-Omics Reports for Tumor and Other Boards
-Version: 0.0.46
+Version: 0.0.47
 Authors@R: c(
     person("Martin", "Morgan", email = "martin.morgan@roswellpark.org",
         role = "aut"),
@@ -37,7 +37,10 @@ Imports:
     rDGIdb,
     shiny,
     S4Vectors
-Suggests: BiocStyle, rmarkdown
+Suggests:
+    BiocStyle,
+    rmarkdown,
+    curatedTCGAData
 VignetteBuilder: knitr
 License: Artistic-2.0
 Encoding: UTF-8
