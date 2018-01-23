@@ -42,6 +42,19 @@ ShinyAppDirWidget <- SOUNDWidget(
     )
 )
 
+#' @rdname SOUNDBoardWidget-class
+#'
+#' @title Interactive display of SOUND resources through a the
+#' ShinyAppWidget class
+#'
+#' @description This function will display a \link{SOUNDManager-class} object
+#' as an interactive shiny widget. The widget allows the user to select
+#' by board, case and assay. The displays will react depending on selected
+#' components of the database. The database is to be created beforehand.
+#'
+#' @param soundmgr A \linkS4class{SOUNDManager} class
+#'
+#' @export
 SOUNDBoardWidget <- function(soundmgr) {
     ShinyAppWidget(
         shinyApp(
