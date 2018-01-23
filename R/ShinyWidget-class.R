@@ -30,3 +30,86 @@ ShinyAppDirWidget <- SOUNDWidget(
     report = function(x) shiny::shinyAppDir(sbresource(x)),
     where = topenv()
 )
+
+#' @exportClass SOUNDBoardWidget
+#'
+#' @export
+.SOUNDBoardWidget <- setClass(
+    "SOUNDBoardWidget",
+    contains = "ShinyAppWidget",
+    slots = c(
+        resource = "ShinyAppWidget"
+    )
+)
+
+SOUNDBoardWidget <- function(soundmgr) {
+    ShinyAppWidget(
+        shinyApp(
+            ui = fluidPage(
+                includeCSS("../inst/resources/html/soundboard2.css"),
+                fluidRow(
+                    column(8, titlePanel("SOUNDBoard Report")),
+                    column(4, br(),
+                        img(src = "../inst/resources/html/sound_wordmark.svg",
+                        align = "right", height = 72, width = 96,
+                        style = "margin-left:10px"))
+                ),
+                fluidRow(
+                    column(3,
+                            wellPanel(
+                                h3("Select Board"),
+                                selectInput("board", "Board",
+                                choices = as.data.frame(tbl(soundmgr,
+                                    "board"))[["board_uid"]]),
+                                helpText(h3("Select Case")),
+                                uiOutput("cases"),
+                                helpText(h3("Select Assay")),
+                                selectInput("assay", "Assay",
+                                    choices = unique(as.data.frame(
+                                        tbl(soundmgr, "assay"))[["assay"]]))
+                            )),
+                    column(9,
+                            fluidRow(
+                                column(12, DT::dataTableOutput("casetable")),
+                                column(12, DT::dataTableOutput("assaytable")))
+                    )
+            )),
+            server = function(input, output, session) {
+                pt_table <- reactive({
+                    re_tb <- as.data.frame(tbl(soundmgr, "cases"))
+                    re_tb <- subset(re_tb, board_uid == input$board)
+                })
+                output$cases <- renderUI({
+                    ptdat <- pt_table()
+                    selectInput("case", "Case",
+                        choices =  unique(as.character(ptdat[["case_uid"]])))
+                })
+                output$casetable <- DT::renderDataTable({
+                    ptdat <- pt_table()
+                    DT::datatable(ptdat,
+                        rownames = FALSE, selection = 'none',
+                        callback = DT::JS("table.on('click.dt', 'td', function() {
+                        var rowIndx = table.cell(this).index().row;
+                        rowIndx += 1;
+                        Shiny.onInputChange('rows', rowIndx);
+                        });"),
+                    options = list(dom = "ftpi")
+                    )
+                })
+                case_uid <- eventReactive(input$rows, {
+                    pttab <- pt_table()
+                    pttab[input$rows, "case_uid"]
+                })
+                output$assaytable <- DT::renderDataTable({
+                    cid <- case_uid()
+                    tbl(soundmgr, "assay") %>%
+                        filter(assay == input$assay, case_uid == cid) %>%
+                        sbreport()
+                })
+            },
+            options = list(
+                width = "100%", height = 800
+            )
+        )
+    )
+}
