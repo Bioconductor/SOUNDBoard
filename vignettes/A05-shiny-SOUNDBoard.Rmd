@@ -102,44 +102,5 @@ tbl(x, "assay") <- list(
 ## Embedded Application
 
 ```{r shinyapp, echo=FALSE, cache = FALSE}
-shinyApp(
-    ui = fluidPage(
-        includeCSS("../inst/resources/html/soundboard2.css"),
-        fluidRow(
-            column(8, titlePanel("SOUNDBoard Report"))
-        ),
-        fluidRow(DT::dataTableOutput("table")),
-        fluidRow(DT::dataTableOutput("mutation"))
-        ),
-    server = function(input, output, session) {
-        pt_table <- as.data.frame(tbl(x, "cases"))
-
-        output$table <- DT::renderDataTable({
-            DT::datatable(pt_table,
-            rownames = FALSE, selection = 'none',
-            callback = JS("table.on('click.dt', 'td', function() {
-                var rowIndx = table.cell(this).index().row;
-                rowIndx += 1;
-                // var col = table.cell(this).index().column;
-                // var rnd = Math.random();
-                // var data = [row_, col, rnd];
-                Shiny.onInputChange('rows', rowIndx);
-                });"),
-            options = list(dom = "ftpi")
-            )
-        })
-        case_uid <- eventReactive(input$rows, {
-          pt_table[input$rows, "case_uid"]
-        })
-        output$mutation <- DT::renderDataTable({
-            cid <- case_uid()
-            tbl(x, "assay") %>%
-                filter(assay == "GISTIC2", case_uid == cid) %>%
-                    sbreport()
-        })
-    },
-    options = list(
-        width = "100%", height = 800
-    )
-)
+sbreport(SOUNDBoardWidget(x))
 ```
