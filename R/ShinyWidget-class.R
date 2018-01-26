@@ -59,7 +59,7 @@ SOUNDBoardWidget <- function(soundmgr) {
     ShinyAppWidget(
         shinyApp(
             ui = fluidPage(
-                includeCSS("../inst/resources/html/soundboard2.css"),
+                includeCSS(SOUNDBoard:::.options$get("css")),
                 fluidRow(
                     column(8, titlePanel("SOUNDBoard Report")),
                     column(4, br(),

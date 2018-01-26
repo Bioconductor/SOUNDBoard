@@ -9,7 +9,8 @@ data(geneExpr)
 ##
 
 ## # Read file from AWS
-gbm <- curatedTCGAData("GBM", c("GISTICT", "GISTICA", "Mutation", "RNASeq2GeneNorm"), FALSE)
+gbm <- curatedTCGAData("GBM",
+    c("GISTICT", "GISTICA", "Mutation", "RNASeq2GeneNorm"), FALSE)
 rownames(gbm[[3]]) <- RaggedExperiment::mcols(gbm[[3]])[["Hugo_Symbol"]]
 genesOfInterest <- c("FAF1", "ASTN1", "PROX1", "PARP1", "AKR1C4", "TAF3")
 gbm <- gbm[genesOfInterest, rownames(colData(gbm)) == "TCGA-32-2615", ]
