@@ -63,7 +63,8 @@ SOUNDBoardWidget <- function(soundmgr) {
                 fluidRow(
                     column(8, titlePanel("SOUNDBoard Report")),
                     column(4, br(),
-                        img(src = "../inst/resources/html/sound_wordmark.svg",
+                        img(src = file.path(SOUNDBoard:::.options$get("resources"),
+                            "html", "sound_wordmark.png"),
                         align = "right", height = 72, width = 96,
                         style = "margin-left:10px"))
                 ),
