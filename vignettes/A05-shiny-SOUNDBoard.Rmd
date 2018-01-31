@@ -97,23 +97,9 @@ tbl(x, "board") <- list(
     description = "Ovarian Cancer Klinischer Management"
 )
 
-gbrows <- seq_len(nrow(GBM_colData))
+tbl(x, "cases") <- data.frame(board_uid = "GBMset", GBM_colData)
 
-for (i in gbrows) {
-tbl(x, "cases") <- c(list(
-    board_uid = "GBMset"),
-    as.list(GBM_colData[i, , drop = FALSE])
-    )
-}
-
-ovrows <- seq_len(nrow(ov_coldata))
-
-for (i in ovrows) {
-tbl(x, "cases") <- c(list(
-    board_uid = "OVset"),
-    as.list(ov_coldata[i, , drop = FALSE])
-    )
-}
+tbl(x, "cases") <- data.frame(board_uid = "OVset", ov_coldata)
 
 for (i in gbrows) {
 tbl(x, "assay") <- list(
