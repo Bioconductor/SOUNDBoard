@@ -101,6 +101,7 @@ tbl(x, "cases") <- data.frame(board_uid = "GBMset", GBM_colData)
 
 tbl(x, "cases") <- data.frame(board_uid = "OVset", ov_coldata)
 
+gbrows <- seq_len(nrow(GBM_colData))
 for (i in gbrows) {
 tbl(x, "assay") <- list(
     case_uid = GBM_colData[i, "case_uid"],
@@ -109,6 +110,8 @@ tbl(x, "assay") <- list(
     resource = manage(x, GBM_GISTIC[, i, drop = FALSE])
     )
 }
+
+ovrows <- seq_len(nrow(ov_coldata))
 for (i in ovrows) {
 tbl(x, "assay") <- list(
     case_uid = ov_coldata[i, "case_uid"],

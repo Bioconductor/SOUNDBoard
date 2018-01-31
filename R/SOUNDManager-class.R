@@ -309,16 +309,16 @@ tbl.SOUNDManager <-
     src
 }
 
-#' # export
-#' `tbl<-.DataFrame` <-
-#'     function(src, from, ..., value)
-#' {
-#'     value <- as.data.frame(value)
-#'     `tbl<-.data.frame`(src, from, value = value)
-#' }
-#'
-#' # exportMethod tbl<-
-#' setMethod("tbl<-", c(src = "tbl", value = "DataFrame"), `tbl<-.DataFrame`)
+## export
+#`tbl<-.DataFrame` <-
+#    function(src, from, ..., value)
+#{
+#    value <- as.data.frame(value)
+#    `tbl<-.data.frame`(src, from, value = value)
+#}
+#
+## exportMethod tbl<-
+#setMethod("tbl<-", c(src = "tbl", value = "DataFrame"), `tbl<-.DataFrame`)
 
 ##
 ## manager functionality
