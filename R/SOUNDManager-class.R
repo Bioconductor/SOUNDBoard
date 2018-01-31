@@ -292,6 +292,34 @@ tbl.SOUNDManager <-
     src
 }
 
+#' @export
+`tbl<-.data.frame` <-
+    function(src, from, ..., value)
+{
+    stopifnot(
+        is.data.frame(value),
+        setequal(names(value), colnames(tbl(src, from)))
+    )
+
+    con <- DBI::dbConnect(RSQLite::SQLite(), .sql_file(src))
+    on.exit(DBI::dbDisconnect(conn))
+
+    db_insert_into(con, values = value)
+
+    src
+}
+
+#' # export
+#' `tbl<-.DataFrame` <-
+#'     function(src, from, ..., value)
+#' {
+#'     value <- as.data.frame(value)
+#'     `tbl<-.data.frame`(src, from, value = value)
+#' }
+#'
+#' # exportMethod tbl<-
+#' setMethod("tbl<-", c(src = "tbl", value = "DataFrame"), `tbl<-.DataFrame`)
+
 ##
 ## manager functionality
 ##
