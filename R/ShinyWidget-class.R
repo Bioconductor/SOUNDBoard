@@ -61,12 +61,13 @@ SOUNDBoardWidget <- function(soundmgr) {
             ui = fluidPage(
                 includeCSS(SOUNDBoard:::.options$get("css")),
                 fluidRow(
-                    column(8, titlePanel("SOUNDBoard Report")),
-                    column(4, br(),
-                        img(src = file.path(SOUNDBoard:::.options$get("resources"),
-                            "html", "sound_wordmark.png"),
-                        align = "right", height = 72, width = 96,
-                        style = "margin-left:10px"))
+                    column(6, titlePanel("SOUNDBoard Report")),
+                    column(6,
+                        img(src = file.path(
+                            SOUNDBoard:::.options$get("resources"), "html",
+                                "sound_wordmark.png"),
+                            align = "right", height = 54, width = 72,
+                            style = "margin-left:10px"))
                 ),
                 fluidRow(
                     column(3,
@@ -78,9 +79,7 @@ SOUNDBoardWidget <- function(soundmgr) {
                                 helpText(h3("Select Case")),
                                 uiOutput("cases"),
                                 helpText(h3("Select Assay")),
-                                selectInput("assay", "Assay",
-                                    choices = unique(as.data.frame(
-                                        tbl(soundmgr, "assay"))[["assay"]]))
+                                uiOutput("assay")
                             )),
                     column(9,
                             fluidRow(
@@ -95,8 +94,17 @@ SOUNDBoardWidget <- function(soundmgr) {
                 })
                 output$cases <- renderUI({
                     ptdat <- pt_table()
-                    selectInput("case", "Case",
+                    selectInput("cases", "Cases",
                         choices =  unique(as.character(ptdat[["case_uid"]])))
+                })
+                assay_tab <- reactive({
+                    as_tb <- as.data.frame(tbl(soundmgr, "assay"))
+                    as_tb <- subset(as_tb, case_uid == input$cases)
+                })
+                output$assay <- renderUI({
+                    adat <- assay_tab()
+                    selectInput("assay", "Assay",
+                        choices = unique(as.character(adat[["assay"]])))
                 })
                 output$casetable <- DT::renderDataTable({
                     ptdat <- pt_table()
