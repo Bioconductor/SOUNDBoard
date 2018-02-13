@@ -79,12 +79,13 @@ setMethod("sbreport", "tbl_cases",
     function(x)
 {
     df <- as.data.frame(x)
-    if ("case_uid" %in% names(df))
-        cat("<br>**Case**: ", df$case_uid, "\n")
-    df <- df[names(df) != "case_uid"]
-    for (nm in names(df))
-        cat("<br>", sub("^(.)", "\\U\\1", nm, perl=TRUE), ": ",
-            df[[nm]], "\n", sep="")
+    DT::datatable(df, options = list(dom = "ftpi"))
+    # if ("case_uid" %in% names(df))
+    #     cat("<br>**Case**: ", df$case_uid, "\n")
+    # df <- df[names(df) != "case_uid"]
+    # for (nm in names(df))
+    #     cat("<br>", sub("^(.)", "\\U\\1", nm, perl=TRUE), ": ",
+    #         df[[nm]], "\n", sep="")
 })
 
 #' @rdname sbsave-load-report
