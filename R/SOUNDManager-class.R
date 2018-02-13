@@ -274,51 +274,30 @@ tbl.SOUNDManager <-
     .stopifnot_is_scalar(from)
     stopifnot(from %in% src_tbls(src))
     stopifnot(
-        is.list(value),
+        is.list(value) || is.data.frame(value) || is(value, "DataFrame"),
         setequal(names(value), colnames(tbl(src, from)))
     )
 
-    value <- lapply(value, function(v) {
-        if (is.character(v))
-            gsub("[[:space:]]+", " ", v)
-        v
-    })
+    if (is.data.frame(value) || is(value, "DataFrame")) {
+        value <- as.data.frame(value)
+        con <- DBI::dbConnect(RSQLite::SQLite(), .sql_file(src))
+        on.exit(DBI::dbDisconnect(con))
 
-    sql_cmd <- sprintf("-- %s_INSERT", toupper(from))
-    result <- .sql_execute(
-        .sql_file(src), .sql_template_path(src), sql_cmd, value
-    )
+        db_insert_into(con, from, values = value)
+    } else {
+        value <- lapply(value, function(v) {
+            if (is.character(v))
+                gsub("[[:space:]]+", " ", v)
+            v
+        })
 
+        sql_cmd <- sprintf("-- %s_INSERT", toupper(from))
+        result <- .sql_execute(
+            .sql_file(src), .sql_template_path(src), sql_cmd, value
+        )
+    }
     src
 }
-
-#' @export
-`tbl<-.data.frame` <-
-    function(src, from, ..., value)
-{
-    stopifnot(
-        is.data.frame(value),
-        setequal(names(value), colnames(tbl(src, from)))
-    )
-
-    con <- DBI::dbConnect(RSQLite::SQLite(), .sql_file(src))
-    on.exit(DBI::dbDisconnect(conn))
-
-    db_insert_into(con, values = value)
-
-    src
-}
-
-## export
-#`tbl<-.DataFrame` <-
-#    function(src, from, ..., value)
-#{
-#    value <- as.data.frame(value)
-#    `tbl<-.data.frame`(src, from, value = value)
-#}
-#
-## exportMethod tbl<-
-#setMethod("tbl<-", c(src = "tbl", value = "DataFrame"), `tbl<-.DataFrame`)
 
 ##
 ## manager functionality
